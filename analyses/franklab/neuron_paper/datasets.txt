@@ -1,0 +1,2 @@
+tetrode ../../../datasets/franklab/franklab_np_tetrode_01
+probe ../../../datasets/franklab/franklab_np_probe_01
