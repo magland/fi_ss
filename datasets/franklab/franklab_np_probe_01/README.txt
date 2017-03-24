@@ -5,4 +5,4 @@ Animal Name: kanye
 Ntrode 19, 16-ch probe 3
 Num_chan 16
 Location: Animal Right, mPFC
-Referenced to 
+Referenced to Corpus Callosum
