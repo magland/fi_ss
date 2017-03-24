@@ -1,7 +1,7 @@
 {
-    "original_checksum": "9a19b8e4e22e2939dc6255b020bd6474fd016d63",
-    "original_fcs": "head1000-3b715753c48f48984d16c2fce87e6ba26ea1f2b9",
-    "original_path": "../../../raw/7hr_nt18_full.mda",
+    "original_checksum": "bf91fafcefd530d23b2f50c428dd5537468de416",
+    "original_fcs": "head1000-b7a44051e90156976deed981f06740cf15aba7dc",
+    "original_path": "7hr_nt19_full.mda",
     "original_size": 22977965268,
-    "prv_version": "0.11"
+    "prv_version": 0.10000000000000001
 }
