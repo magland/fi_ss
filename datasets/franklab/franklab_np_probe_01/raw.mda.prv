@@ -1,7 +1,7 @@
 {
-    "original_checksum": "59ba8042a7709796633d84cec4b99f1685083f69",
-    "original_fcs": "head1000-01a2e7c805884dafa579dad3f4dd69a3f4b8d3a2",
-    "original_path": "../../raw/ms11d45_18chan.mda",
-    "original_size": 1950066704,
-    "prv_version": 0.10000000000000001
+    "original_checksum": "9a19b8e4e22e2939dc6255b020bd6474fd016d63",
+    "original_fcs": "head1000-3b715753c48f48984d16c2fce87e6ba26ea1f2b9",
+    "original_path": "../../../raw/7hr_nt18_full.mda",
+    "original_size": 22977965268,
+    "prv_version": "0.11"
 }
