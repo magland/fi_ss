@@ -1,1 +1,7 @@
-ms2_001 ms2_001.pipeline --detect_sign=-1 --curation=curation_ms2.script
+ms2 ms2_001.pipeline --detect_sign=0 --curation=curation_ms2.script
+ms2b ms2_001.pipeline --detect_sign=0 --detect_threshold=2.5 --curation=curation_ms2.script
+ms2_neg ms2_001.pipeline --detect_sign=-1 --curation=curation_ms2.script
+ks16 kilosort_001.pipeline --num_clusters=16
+ks32 kilosort_001.pipeline --num_clusters=32
+ks64 kilosort_001.pipeline --num_clusters=64
+sc spyking_circus_001.pipeline --spike_thresh=4
