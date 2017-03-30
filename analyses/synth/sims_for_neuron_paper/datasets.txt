@@ -1,0 +1,4 @@
+tet_K=8_snr=12 datasets/tet_K=8_snr=12
+tet_K=8_snr=3 datasets/tet_K=8_snr=3
+tet_K=8_snr=6 datasets/tet_K=8_snr=6
+tet_K=8_snr=9 datasets/tet_K=8_snr=9
