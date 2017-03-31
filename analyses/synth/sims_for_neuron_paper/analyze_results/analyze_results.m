@@ -1,5 +1,8 @@
 function analyze_results
 
+close all;
+drawnow;
+
 basepath=[fileparts(mfilename('fullpath')),'/..'];
 temppath=[basepath,'/tmpdata'];
 resultspath=[basepath,'/results'];
@@ -43,64 +46,65 @@ writemda(concat_output_ks32,sprintf('%s/concat_output_ks32.mda',resultspath));
 MS2=concat_output_ms2;
 KS32=concat_output_ks32;
 
-marker_size=15;
+marker_size=6;
+
+% figure;
+% h=plot(MS2(1,:),MS2(2,:),'bo','MarkerSize',marker_size);
+% hold on;
+% h=plot(KS32(1,:),KS32(2,:),'ro','MarkerSize',marker_size);
+% legend('MountainSort','KiloSort');
+% xlabel('Peak amplitude');
+% ylabel('Unit accuracy');
+% title('Accuracy vs. peak amplitude');
 
 figure;
-h=plot(MS2(1,:),MS2(2,:),'b.','MarkerSize',marker_size);
-hold on;
-h=plot(KS32(1,:),KS32(2,:),'r.','MarkerSize',marker_size);
-legend('MountainSort','KiloSort');
-xlabel('Peak amplitude');
-ylabel('Unit accuracy');
-title('Accuracy vs. peak amplitude');
+set(gcf,'Position',[200,200,1000,1000]);
+ppp=1;
 
-figure;
-h=plot(MS2(1,:),MS2(3,:),'b.','MarkerSize',marker_size);
+subplot(3,2,ppp); ppp=ppp+1;
+h=plot(MS2(1,:),MS2(3,:),'bo','MarkerSize',marker_size);
 hold on;
-h=plot(KS32(1,:),KS32(3,:),'r.','MarkerSize',marker_size);
+h=plot(KS32(1,:),KS32(3,:),'ro','MarkerSize',marker_size);
 legend('MountainSort','KiloSort');
 xlabel('Peak amplitude');
 ylabel('Unit sensitivity rate');
 title('Sensitivity rate vs. peak amplitude');
 
-figure;
-h=plot(MS2(1,:),MS2(4,:),'b.','MarkerSize',marker_size);
+subplot(3,2,ppp); ppp=ppp+1;
+h=plot(MS2(1,:),MS2(4,:),'bo','MarkerSize',marker_size);
 hold on;
-h=plot(KS32(1,:),KS32(4,:),'r.','MarkerSize',marker_size);
+h=plot(KS32(1,:),KS32(4,:),'ro','MarkerSize',marker_size);
 legend('MountainSort','KiloSort');
 xlabel('Peak amplitude');
 ylabel('Unit specificity rate');
 title('Specificity rate vs. peak amplitude');
 
-
-
 % for this plot ignore the ones that have no match
 MS2=MS2(:,find(MS2(2,:)>0));
 
-figure;
-h=plot(MS2(5,:),MS2(3,:),'b.','MarkerSize',marker_size);
+subplot(3,2,ppp); ppp=ppp+1;
+h=plot(MS2(5,:),MS2(3,:),'bo','MarkerSize',marker_size);
 xlabel('Noise overlap metric');
 ylabel('Unit sensitivity rate');
-title('Sensitivity rate vs. noise overlap for MountainSort');
+title({'Sensitivity vs. noise overlap metric','for MountainSort'});
 
-figure;
-h=plot(MS2(5,:),MS2(4,:),'b.','MarkerSize',marker_size);
+subplot(3,2,ppp); ppp=ppp+1;
+h=plot(MS2(5,:),MS2(4,:),'bo','MarkerSize',marker_size);
 xlabel('Noise overlap metric');
 ylabel('Unit specificity rate');
-title('Specificity rate vs. noise overlap metric for MountainSort');
+title({'Specificity vs. noise overlap metric','for MountainSort'});
 
-figure;
-h=plot(MS2(6,:),MS2(3,:),'b.','MarkerSize',marker_size);
+subplot(3,2,ppp); ppp=ppp+1;
+h=plot(MS2(6,:),MS2(3,:),'bo','MarkerSize',marker_size);
 xlabel('Isolation metric');
 ylabel('Unit sensitivity rate');
-title('Sensitivity rate vs. isolation metric for MountainSort');
+title({'Sensitivity vs. isolation metric','for MountainSort'});
 
-figure;
-h=plot(MS2(6,:),MS2(4,:),'b.','MarkerSize',marker_size);
+subplot(3,2,ppp); ppp=ppp+1;
+h=plot(MS2(6,:),MS2(4,:),'bo','MarkerSize',marker_size);
 xlabel('Isolation metric');
 ylabel('Unit specificity rate');
-title('Specificity rate vs. isolation metric for MountainSort');
-
+title({'Specificity vs. isolation metric','for MountainSort'});
 
 disp('done.');
 
