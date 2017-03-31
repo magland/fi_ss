@@ -1,0 +1,3 @@
+jux128n2 ../../../datasets/netokampff/juxta128_2
+jux128n2sm ../../../datasets/netokampff/juxta128_2_32
+jux128n2tet ../../../datasets/netokampff/juxta128_2_4
