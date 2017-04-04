@@ -1,4 +1,9 @@
 ms2 ms2_001.pipeline --detect_sign=0 --detect_threshold=3.0
 ms2m ms2_001.pipeline --detect_sign=-1 --detect_threshold=3.0
+ms2mu ms2_001.pipeline --detect_sign=-1 --detect_threshold=3.0 --multichannel=true --adjacency_radius=25 --fit_stage=true
+
 ms mountainsort_002.pipeline --detect_sign=0 --detect_threshold=3.0
+msu mountainsort_002.pipeline --detect_sign=0 --detect_threshold=3.0 --multichannel=true --adjacency_radius=25 --fit_stage=true
+msmu mountainsort_002.pipeline --detect_sign=-1 --detect_threshold=3.0 --multichannel=true --adjacency_radius=25 --fit_stage=true
+
 msold mountainsort_001.pipeline --detect_sign=0 --detect_threshold=3.0

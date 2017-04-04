@@ -43,3 +43,31 @@ mda raw.mda
 #outputs a json w/ params.
 
 # failure for 128 ch - fixed, was int32 vs 64 issue. MN>2^31
+
+
+#-------------------------------------------
+
+kron-run msu jux128n2sh --_nodaemon
+
+Elapsed time (sec):
+
+  0.028 (geom2adj)
+
+  5.981 (bandpass_filter)
+  3.785 (mask_out_artifacts)
+
+  27.884 (whiten)
+
+  6.528 (detect)
+
+  106.357 (isocluster_v1)
+
+  127.654 (merge_across_channels_v2)
+
+  23.074 (fit_stage)
+  104.394 (ms_metrics)
+
+BUt why
+kron-run msmu jux128n2sh --_nodaemon
+which has only -1 sign, ran instantly and gave exactly K=285 as in sign=0 (msu)?
+
