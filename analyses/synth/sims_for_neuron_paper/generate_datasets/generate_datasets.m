@@ -1,7 +1,7 @@
 function generate_datasets
 
-neuron_tetrode_path='/home/magland/dev/mountainsort_experiments/BIGFILES/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
-%neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
+%neuron_tetrode_path='/home/magland/dev/mountainsort_experiments/BIGFILES/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
+neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
 %neuron_tetrode_path='/home/magland/prvdata/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
 samplerate=30000;
 snrs=[3,6,9,12];
@@ -130,7 +130,7 @@ fprintf('Writing true waveforms: %s...\n',waveforms_out_path);
 writemda32(waveforms_true,waveforms_out_path);
 
 
-function create_noise_dataset(raw_path,noise_out_path,oo)
+function create_noise_dataset(raw_path,background_signal_out_path,oo)
 opts.samplerate=oo.samplerate;
 opts.detect_freq_min=800;
 opts.detect_freq_max=6000;
@@ -141,7 +141,7 @@ opts.blend_overlap_size=100;
 opts.signal_scale_factor=100;
 opts.num_units=8;
 opts.tempdir=oo.tempdir;
-generate_noise_dataset(raw_path,noise_out_path,opts);
+generate_noise_dataset(raw_path,background_signal_out_path,opts);
 
 function Y=generate_noise_dataset(raw_fname,noise_out_fname,opts);
 
