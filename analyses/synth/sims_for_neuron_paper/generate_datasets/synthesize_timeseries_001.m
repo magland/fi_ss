@@ -34,8 +34,9 @@ synth_opts.upsamplefac=opts.upsamplefac;
 refr=opts.refractory_period;
 
 firing_rates=opts.firing_rate_range(1)+rand(1,K)*(opts.firing_rate_range(2)-opts.firing_rate_range(1));
-tmp=opts.amp_variation_range(1)+rand(1,K)*(opts.amp_variation_range(2)-opts.amp_variation_range(1));
-amp_variations=ones(2,K); amp_variations(1,:)=tmp; amp_variations(2,:)=1; %amplitude variation
+%tmp=opts.amp_variation_range(1)+rand(1,K)*(opts.amp_variation_range(2)-opts.amp_variation_range(1));
+%amp_variations=zeros(2,K); amp_variations(1,:)=tmp; amp_variations(2,:)=1; %amplitude variation
+amp_variation_ranges=zeros(2,K); amp_variation_ranges(1,:)=opts.amp_variation_range(1); amp_variation_ranges(2,:)=opts.amp_variation_range(2);
 
 opts2.geom_spread_coef1=0.4;
 opts2.upsamplefac=synth_opts.upsamplefac;
@@ -67,8 +68,8 @@ for k=1:K
     
     times=[times,times0];
     labels=[labels,k*ones(size(times0))];
-    amp1=amp_variations(1,k);
-    amp2=amp_variations(2,k);
+    amp1=amp_variation_ranges(1,k);
+    amp2=amp_variation_ranges(2,k);
     ampls=[ampls,rand_uniform(amp1,amp2,size(times0)).*ones(size(times0))];
 end;
 

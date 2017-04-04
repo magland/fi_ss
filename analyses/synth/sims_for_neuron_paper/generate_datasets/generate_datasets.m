@@ -1,10 +1,12 @@
 function generate_datasets
 
-neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
+neuron_tetrode_path='/home/magland/dev/mountainsort_experiments/BIGFILES/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
+%neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
 %neuron_tetrode_path='/home/magland/prvdata/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
 samplerate=30000;
 snrs=[3,6,9,12];
-Ks=[8];
+Ks=[12];
+amp_variation_range=[1,1];
 
 basepath=[fileparts(mfilename('fullpath')),'/..'];
 
@@ -13,10 +15,12 @@ mkdir([basepath,'/raw']);
 mkdir([basepath,'/datasets']);
 
 noise_fname=[basepath,'/tmpdata/tet_noise.mda'];
-oo=struct;
-oo.samplerate=samplerate;
-oo.tempdir=[basepath,'/tmpdata'];
-create_noise_dataset(neuron_tetrode_path,noise_fname,oo);
+if (~exist(noise_fname))
+    oo=struct;
+    oo.samplerate=samplerate;
+    oo.tempdir=[basepath,'/tmpdata'];
+    create_noise_dataset(neuron_tetrode_path,noise_fname,oo);
+end;
 sz=readmdadims(noise_fname);
 M=sz(1); N=sz(2);
 
@@ -28,18 +32,22 @@ for iK=1:length(Ks)
     oo.N=N;
     oo.samplerate=samplerate;
     oo.random_seed=1;
-    create_signal_dataset([basepath,'/tmpdata/sig_tet_K=8.mda'],[basepath,'/tmpdata/firings_tet_K=8.mda'],oo);
+    oo.amp_variation_range=amp_variation_range;
+    str0=sprintf('tet_K=%d',K);
+    create_signal_dataset(sprintf('%s/tmpdata/sig_%s.mda',basepath,str0),sprintf('%s/tmpdata/firings_%s.mda',basepath,str0),sprintf('%s/tmpdata/waveforms_%s.mda',basepath,str0),oo);
 
     for j=1:length(snrs)
         str0=sprintf('tet_K=%d',K);
         str1=sprintf('%s_snr=%g',str0,snrs(j));
         sig_fname=sprintf('%s/tmpdata/sig_%s.mda',basepath,str0);
         firings_fname=sprintf('%s/tmpdata/firings_%s.mda',basepath,str0);
+        waveforms_fname=sprintf('%s/tmpdata/waveforms_%s.mda',basepath,str0);
         raw_out_fname=sprintf('%s/raw/%s.mda',basepath,str1);
         firings_out_fname=sprintf('%s/raw/firings_%s.mda',basepath,str1);
+        waveforms_out_fname=sprintf('%s/raw/waveforms_%s.mda',basepath,str1);
         oo=struct;
         oo.snr=snrs(j);
-        create_dataset(noise_fname,sig_fname,firings_fname,raw_out_fname,firings_out_fname,oo);
+        create_dataset(noise_fname,sig_fname,firings_fname,waveforms_fname,raw_out_fname,firings_out_fname,waveforms_out_fname,oo);
     end;
 end;
 
@@ -50,26 +58,30 @@ oo.samplerate=samplerate;
 for j=1:length(A)
     B=A(j);
     raw_fname=B.name;
-    if (~strcmp(raw_fname(1),'.'))&&(strcmp(raw_fname(end-3:end),'.mda'))&&(~strcmp(raw_fname(1:length('firings')),'firings'))
+    if (~strcmp(raw_fname(1),'.'))&&(strcmp(raw_fname(end-3:end),'.mda'))&&(~strcmp(raw_fname(1:length('firings')),'firings'))&&(~strcmp(raw_fname(1:length('waveforms')),'waveforms'))
         str0=raw_fname(1:end-4);
         raw_fname1=sprintf([basepath,'/raw/%s.mda'],str0);
         firings_fname=sprintf([basepath,'/raw/firings_%s.mda'],str0);
+        waveforms_fname=sprintf([basepath,'/raw/waveforms_%s.mda'],str0);
         dirname=sprintf([basepath,'/datasets/%s'],str0);
         fprintf('Creating prv dataset: %s -> %s...\n',raw_fname1,dirname);
-        create_prv_dataset(raw_fname1,firings_fname,dirname,oo);
+        create_prv_dataset(raw_fname1,firings_fname,waveforms_fname,dirname,oo);
         datasets_txt=sprintf('%s%s datasets/%s\n',datasets_txt,str0,str0);
     end;
 end;
 write_text_file([basepath,'/datasets.txt'],datasets_txt);
 
-function create_prv_dataset(raw_fname,firings_fname,dirname_out,opts)
+function create_prv_dataset(raw_fname,firings_fname,waveforms_fname,dirname_out,opts)
 mkdir(dirname_out);
 system(sprintf('prv-create %s %s',raw_fname,[dirname_out,'/raw.mda.prv']));
 system(sprintf('prv-create %s %s',firings_fname,[dirname_out,'/firings_true.mda.prv']));
+system(sprintf('cp %s %s',waveforms_fname,[dirname_out,'/waveforms_true.mda']));
 params_txt=sprintf('{"samplerate":%g}',opts.samplerate);
 write_text_file(sprintf('%s/params.json',dirname_out),params_txt);
+geom_txt=sprintf('0,0\n1,0\n2,0\n3,0\n');
+write_text_file(sprintf('%s/geom.csv',dirname_out),geom_txt);
 
-function create_dataset(noise_fname,sig_fname,firings_fname,timeseries_out_fname,firings_out_fname,opts)
+function create_dataset(noise_fname,sig_fname,firings_fname,waveforms_fname,timeseries_out_fname,firings_out_fname,waveforms_out_fname,opts)
 fprintf('Reading noise: %s...\n',noise_fname);
 Xnoise=readmda(noise_fname);
 
@@ -90,7 +102,12 @@ writemda16i(Y,timeseries_out_fname);
 fprintf('Writing true firings: %s...\n',firings_out_fname);
 writemda(readmda(firings_fname),firings_out_fname);
 
-function create_signal_dataset(timeseries_out_path,firings_out_path,opts)
+fprintf('Writing true waveforms: %s...\n',waveforms_out_fname);
+waveforms0=readmda(waveforms_fname);
+waveforms0=waveforms0*opts.snr;
+writemda(waveforms0,waveforms_out_fname);
+
+function create_signal_dataset(timeseries_out_path,firings_out_path,waveforms_out_path,opts)
 oo=struct;
 oo.M=opts.M;
 oo.N=opts.N;
@@ -99,16 +116,18 @@ oo.samplerate=opts.samplerate;
 oo.refractory_period=10;
 oo.noise_level=0;
 oo.firing_rate_range=[0.5,3];
-oo.amp_variation_range=[1,1];
+oo.amp_variation_range=opts.amp_variation_range;
 oo.random_seed=opts.random_seed;
 
 fprintf('Synthesizing signal timeseries...\n');
-[Y,firings_true]=synthesize_timeseries_001(oo);
+[Y,firings_true,waveforms_true]=synthesize_timeseries_001(oo);
 
 fprintf('Writing signal timeseries: %s...\n',timeseries_out_path);
 writemda32(Y,timeseries_out_path);
 fprintf('Writing true firings: %s...\n',firings_out_path);
 writemda32(firings_true,firings_out_path);
+fprintf('Writing true waveforms: %s...\n',waveforms_out_path);
+writemda32(waveforms_true,waveforms_out_path);
 
 
 function create_noise_dataset(raw_path,noise_out_path,oo)
@@ -178,9 +197,12 @@ writemda32(Y,noise_out_fname);
 function run_bandpass_filter(fname_in,fname_out,opts)
 cmd=sprintf('mp-run-process mountainsort.bandpass_filter --timeseries=%s --timeseries_out=%s --samplerate=%g --freq_min=%g --freq_max=%g',...
     fname_in,fname_out,opts.samplerate,opts.freq_min,opts.freq_max);
-cmd=sprintf('%s %s','LD_LIBRARY_PATH=/usr/local/lib',cmd);
+cmd=adjust_system_command(cmd);
 fprintf('Running: %s\n',cmd);
 system(cmd);
+
+function cmd=adjust_system_command(cmd)
+cmd=sprintf('%s %s','LD_LIBRARY_PATH=/usr/local/lib',cmd);
 
 function Y=blend_segments(segments,overlap_width)
 M=size(segments{1},1);
