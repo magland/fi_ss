@@ -78,7 +78,7 @@ system(sprintf('prv-create %s %s',firings_fname,[dirname_out,'/firings_true.mda.
 system(sprintf('cp %s %s',waveforms_fname,[dirname_out,'/waveforms_true.mda']));
 params_txt=sprintf('{"samplerate":%g}',opts.samplerate);
 write_text_file(sprintf('%s/params.json',dirname_out),params_txt);
-geom_txt=sprintf('0,0\n,1,0\n2,0\n3,0\n');
+geom_txt=sprintf('0,0\n1,0\n2,0\n3,0\n');
 write_text_file(sprintf('%s/geom.csv',dirname_out),geom_txt);
 
 function create_dataset(noise_fname,sig_fname,firings_fname,waveforms_fname,timeseries_out_fname,firings_out_fname,waveforms_out_fname,opts)
