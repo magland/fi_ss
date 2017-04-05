@@ -1,7 +1,11 @@
-ms2 ms2_001.pipeline --detect_sign=0 --curation=curation_ms2.script
-ms2b ms2_001.pipeline --detect_sign=0 --detect_threshold=2.5 --curation=curation_ms2.script
-ms2_neg ms2_001.pipeline --detect_sign=-1 --curation=curation_ms2.script
-ks16 kilosort_001.pipeline --num_clusters=16
+ms2 ms2_001.pipeline --detect_sign=-1 --curation=curation_ms2.script
+ms2_mc ms2_001.pipeline --detect_sign=-1 --multichannel=true --curation=curation_ms2.script --adjacency_radius=100 --fit_stage=true --merge_across_channels=true
+
 ks32 kilosort_001.pipeline --num_clusters=32
 ks64 kilosort_001.pipeline --num_clusters=64
+
 sc spyking_circus_001.pipeline --spike_thresh=4
+
+manual1 truth_from_firings_true.pipeline --firings_file_name=firings_manclust1.mda
+manual2 truth_from_firings_true.pipeline --firings_file_name=firings_manclust2.mda
+manual3 truth_from_firings_true.pipeline --firings_file_name=firings_manclust3.mda

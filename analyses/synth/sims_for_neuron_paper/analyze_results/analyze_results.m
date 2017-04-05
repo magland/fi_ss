@@ -30,6 +30,7 @@ end;
 
 concat_output_ms2=zeros(6,0);
 concat_output_ks32=zeros(6,0);
+concat_output_sc=zeros(6,0);
 for j=1:length(results)
     ret=results{j};
     if (strcmp(ret.algname,'ms2'))
@@ -38,13 +39,18 @@ for j=1:length(results)
     if (strcmp(ret.algname,'ks32'))
         concat_output_ks32=cat(2,concat_output_ks32,ret.output);
     end;
+    if (strcmp(ret.algname,'sc'))
+        concat_output_sc=cat(2,concat_output_sc,ret.output);
+    end;
 end;
 
 writemda(concat_output_ms2,sprintf('%s/concat_output_ms2.mda',resultspath));
 writemda(concat_output_ks32,sprintf('%s/concat_output_ks32.mda',resultspath));
+writemda(concat_output_sc,sprintf('%s/concat_output_sc.mda',resultspath));
 
 MS2=concat_output_ms2;
 KS32=concat_output_ks32;
+SC=concat_output_sc;
 
 marker_size=6;
 
@@ -65,7 +71,8 @@ subplot(3,2,ppp); ppp=ppp+1;
 h=plot(MS2(1,:),MS2(3,:),'bo','MarkerSize',marker_size);
 hold on;
 h=plot(KS32(1,:),KS32(3,:),'ro','MarkerSize',marker_size);
-legend('MountainSort','KiloSort');
+h=plot(SC(1,:),SC(3,:),'go','MarkerSize',marker_size);
+legend('MountainSort','KiloSort','SpyKING Circus');
 xlabel('Peak amplitude');
 ylabel('Unit sensitivity rate');
 title('Sensitivity rate vs. peak amplitude');
@@ -74,7 +81,8 @@ subplot(3,2,ppp); ppp=ppp+1;
 h=plot(MS2(1,:),MS2(4,:),'bo','MarkerSize',marker_size);
 hold on;
 h=plot(KS32(1,:),KS32(4,:),'ro','MarkerSize',marker_size);
-legend('MountainSort','KiloSort');
+h=plot(SC(1,:),SC(4,:),'go','MarkerSize',marker_size);
+legend('MountainSort','KiloSort','SpyKING Circus');
 xlabel('Peak amplitude');
 ylabel('Unit specificity rate');
 title('Specificity rate vs. peak amplitude');

@@ -1,4 +1,4 @@
-ms2 ms2_001.pipeline --detect_threshold=3.5
+ms2 ms2_001.pipeline --detect_threshold=3
 ms2_mc ms2_001.pipeline --detect_threshold=3.5 --multichannel=true --fit_stage=true --merge_across_channels=true --adjacency_radius=100
 ms2_mc_nofit ms2_001.pipeline --detect_threshold=3.5 --multichannel=true --fit_stage=false --adjacency_radius=100
 ks32 kilosort_001.pipeline --num_clusters=32

@@ -6,7 +6,8 @@ neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
 samplerate=30000;
 snrs=[3,6,9,12];
 Ks=[12];
-amp_variation_range=[1,1];
+amp_variation_range=[0.8,1.2];
+random_amp_factor_range=[0,1];
 
 basepath=[fileparts(mfilename('fullpath')),'/..'];
 
@@ -14,14 +15,14 @@ mkdir([basepath,'/tmpdata']);
 mkdir([basepath,'/raw']);
 mkdir([basepath,'/datasets']);
 
-noise_fname=[basepath,'/tmpdata/tet_noise.mda'];
-if (~exist(noise_fname))
+background_signal_fname=[basepath,'/tmpdata/tet_background.mda'];
+if (~exist(background_signal_fname))
     oo=struct;
     oo.samplerate=samplerate;
     oo.tempdir=[basepath,'/tmpdata'];
-    create_noise_dataset(neuron_tetrode_path,noise_fname,oo);
+    create_background_signal_dataset(neuron_tetrode_path,background_signal_fname,oo);
 end;
-sz=readmdadims(noise_fname);
+sz=readmdadims(background_signal_fname);
 M=sz(1); N=sz(2);
 
 for iK=1:length(Ks)
@@ -33,6 +34,7 @@ for iK=1:length(Ks)
     oo.samplerate=samplerate;
     oo.random_seed=1;
     oo.amp_variation_range=amp_variation_range;
+    oo.random_amp_factor_range=random_amp_factor_range;
     str0=sprintf('tet_K=%d',K);
     create_signal_dataset(sprintf('%s/tmpdata/sig_%s.mda',basepath,str0),sprintf('%s/tmpdata/firings_%s.mda',basepath,str0),sprintf('%s/tmpdata/waveforms_%s.mda',basepath,str0),oo);
 
@@ -47,7 +49,7 @@ for iK=1:length(Ks)
         waveforms_out_fname=sprintf('%s/raw/waveforms_%s.mda',basepath,str1);
         oo=struct;
         oo.snr=snrs(j);
-        create_dataset(noise_fname,sig_fname,firings_fname,waveforms_fname,raw_out_fname,firings_out_fname,waveforms_out_fname,oo);
+        create_dataset(background_signal_fname,sig_fname,firings_fname,waveforms_fname,raw_out_fname,firings_out_fname,waveforms_out_fname,oo);
     end;
 end;
 
@@ -81,15 +83,15 @@ write_text_file(sprintf('%s/params.json',dirname_out),params_txt);
 geom_txt=sprintf('0,0\n1,0\n2,0\n3,0\n');
 write_text_file(sprintf('%s/geom.csv',dirname_out),geom_txt);
 
-function create_dataset(noise_fname,sig_fname,firings_fname,waveforms_fname,timeseries_out_fname,firings_out_fname,waveforms_out_fname,opts)
-fprintf('Reading noise: %s...\n',noise_fname);
-Xnoise=readmda(noise_fname);
+function create_dataset(background_fname,sig_fname,firings_fname,waveforms_fname,timeseries_out_fname,firings_out_fname,waveforms_out_fname,opts)
+fprintf('Reading background: %s...\n',background_fname);
+Xbackground=readmda(background_fname);
 
 fprintf('Reading signal: %s...\n',sig_fname);
 Xsig=readmda(sig_fname);
 
-fprintf('Combining signal and noise, snr=%g...\n',opts.snr);
-Y=Xnoise+opts.snr*Xsig;
+fprintf('Combining signal and background, snr=%g...\n',opts.snr);
+Y=Xbackground+opts.snr*Xsig;
 max_16bit=2^14; %a bit safe
 
 scale_factor_16bit=max_16bit/max(abs(Y(:)));
@@ -118,6 +120,7 @@ oo.noise_level=0;
 oo.firing_rate_range=[0.5,3];
 oo.amp_variation_range=opts.amp_variation_range;
 oo.random_seed=opts.random_seed;
+oo.random_amp_factor_range=opts.random_amp_factor_range;
 
 fprintf('Synthesizing signal timeseries...\n');
 [Y,firings_true,waveforms_true]=synthesize_timeseries_001(oo);
@@ -130,7 +133,7 @@ fprintf('Writing true waveforms: %s...\n',waveforms_out_path);
 writemda32(waveforms_true,waveforms_out_path);
 
 
-function create_noise_dataset(raw_path,background_signal_out_path,oo)
+function create_background_signal_dataset(raw_path,background_signal_out_path,oo)
 opts.samplerate=oo.samplerate;
 opts.detect_freq_min=800;
 opts.detect_freq_max=6000;
@@ -141,9 +144,9 @@ opts.blend_overlap_size=100;
 opts.signal_scale_factor=100;
 opts.num_units=8;
 opts.tempdir=oo.tempdir;
-generate_noise_dataset(raw_path,background_signal_out_path,opts);
+generate_background_signal_dataset(raw_path,background_signal_out_path,opts);
 
-function Y=generate_noise_dataset(raw_fname,noise_out_fname,opts);
+function Y=generate_background_signal_dataset(raw_fname,background_signal_out_fname,opts);
 
 [path0,fname0,ext0]=fileparts(raw_fname);
 filt_fname=sprintf('%s/filt_%s.mda',opts.tempdir,fname0);
@@ -161,7 +164,7 @@ fprintf('Reading %s...\n',filt_fname);
 Xfilt=readmda(filt_fname);
 fprintf('Reading %s...\n',raw_fname);
 X=readmda(raw_fname);
-fprintf('Normalizing channels for noise dataset...\n');
+fprintf('Normalizing channels for background signal dataset...\n');
 % Question: should we really do this channel-by-channel?
 for m=1:M
     scale_factor=1/sqrt(var(Xfilt(m,:)));
@@ -169,13 +172,13 @@ for m=1:M
     X(m,:)=X(m,:)*scale_factor;
 end;
 
-disp('Finding noise time segment intervals...');
+disp('Finding background time segment intervals...');
 maxabs=max(abs(Xfilt),[],1);
 inds=find(maxabs >= opts.detect_threshold);
 diffs=diff(inds);
 aa=find(diffs>opts.min_segment_size+2*opts.segment_buffer);
 
-disp('Gathering noise segments...');
+disp('Gathering background signal segments...');
 segments=cell(1,length(aa));
 numpts=0;
 sizes=[];
@@ -187,12 +190,12 @@ for j=1:length(aa)
     numpts=numpts+size(segments{j},2);
 end;
 
-disp('Blending noise segments...');
+disp('Blending background signal segments...');
 Y=blend_segments(segments,opts.blend_overlap_size);
 fprintf('Using %g%% of dataset\n',size(Y,2)/size(X,2)*100);
 
-fprintf('Writing %s...\n',noise_out_fname);
-writemda32(Y,noise_out_fname);
+fprintf('Writing %s...\n',background_signal_out_fname);
+writemda32(Y,background_signal_out_fname);
 
 function run_bandpass_filter(fname_in,fname_out,opts)
 cmd=sprintf('mp-run-process mountainsort.bandpass_filter --timeseries=%s --timeseries_out=%s --samplerate=%g --freq_min=%g --freq_max=%g',...

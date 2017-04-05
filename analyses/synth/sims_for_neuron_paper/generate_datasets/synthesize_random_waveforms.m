@@ -8,6 +8,7 @@ if (~isfield(opts,'avg_durations')) opts.avg_durations=[200,10,30,200]; end;
 if (~isfield(opts,'avg_amps')) opts.avg_amps=[0.5,10,-1,0]; end;
 if (~isfield(opts,'rand_durations_stdev')) opts.rand_durations_stdev=[10,4,6,20]; end;
 if (~isfield(opts,'rand_amps_stdev')) opts.rand_amps_stdev=[0.2,3,0.5,0]; end;
+if (~isfield(opts,'waveform_variability_factor')) opts.waveform_variability_factor=1; end;
 if (~isfield(opts,'rand_amp_factor_range')) opts.rand_amp_factor_range=[0.5,1]; end;
 if (~isfield(opts,'geom_spread_coef1')) opts.geom_spread_coef1=0.2; end;
 if (~isfield(opts,'geom_spread_coef2')) opts.geom_spread_coef2=1; end;
@@ -22,8 +23,8 @@ for k=1:K
     for m=1:M
         diff=neuron_locations(:,k)-opts.geometry(:,m);
         dist=sqrt(sum(diff.^2));
-        durations0=max(ones(size(opts.avg_durations)),opts.avg_durations+randn(1,4).*opts.rand_durations_stdev)*opts.upsamplefac;
-        amps0=opts.avg_amps+randn(1,4).*opts.rand_amps_stdev;
+        durations0=max(ones(size(opts.avg_durations)),opts.avg_durations+randn(1,4).*opts.rand_durations_stdev*opts.waveform_variability_factor)*opts.upsamplefac;
+        amps0=opts.avg_amps+randn(1,4).*opts.rand_amps_stdev*opts.waveform_variability_factor;
         waveform0=synthesize_single_waveform(T*opts.upsamplefac,durations0,amps0);
         waveform0=circshift(waveform0,[0,floor(opts.timeshift_factor*dist*opts.upsamplefac)]);
         waveform0=waveform0*rand_uniform(opts.rand_amp_factor_range(1),opts.rand_amp_factor_range(2),[1,1]);
@@ -39,8 +40,9 @@ end
 function test_synthesize_random_waveforms
 M=4;
 T=800;
-K=60;
-waveforms=synthesize_random_waveforms(M,T,K);
+K=10;
+oo.waveform_variability_factor=1;
+waveforms=synthesize_random_waveforms(M,T,K,oo);
 figure; ms_view_templates(waveforms);
 end
 
