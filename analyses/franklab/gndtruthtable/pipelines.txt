@@ -12,3 +12,5 @@ msold mountainsort_001.pipeline --detect_sign=0 --detect_threshold=3.0
 
 truth1 truth_from_firings_true.pipeline --firings_file_name=firings_true.mda
 truth2 truth_from_firings_true.pipeline --firings_file_name=firings_true.mda
+
+ks256 kilosort_001.pipeline --num_clusters=256
