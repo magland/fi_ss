@@ -1,13 +1,14 @@
 function generate_datasets
 
-%neuron_tetrode_path='/home/magland/dev/mountainsort_experiments/BIGFILES/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
-neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
+neuron_tetrode_path='/home/magland/dev/mountainsort_experiments/BIGFILES/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
+%neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
 %neuron_tetrode_path='/home/magland/prvdata/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
 samplerate=30000;
-snrs=[3,6,9,12];
-Ks=[12];
-amp_variation_range=[0.8,1.2];
-random_amp_factor_range=[0,1];
+snrs=[1200];
+Ks=[3];
+amp_variation_ranges=[1,1; 1,1; 1,1];
+shape_variation_factors=[0; 0; 0];
+random_amp_factor_range=[1,1];
 
 basepath=[fileparts(mfilename('fullpath')),'/..'];
 
@@ -33,7 +34,8 @@ for iK=1:length(Ks)
     oo.N=N;
     oo.samplerate=samplerate;
     oo.random_seed=1;
-    oo.amp_variation_range=amp_variation_range;
+    oo.amp_variation_ranges=amp_variation_ranges;
+    oo.shape_variation_factors=shape_variation_factors;
     oo.random_amp_factor_range=random_amp_factor_range;
     str0=sprintf('tet_K=%d',K);
     create_signal_dataset(sprintf('%s/tmpdata/sig_%s.mda',basepath,str0),sprintf('%s/tmpdata/firings_%s.mda',basepath,str0),sprintf('%s/tmpdata/waveforms_%s.mda',basepath,str0),oo);
@@ -118,7 +120,8 @@ oo.samplerate=opts.samplerate;
 oo.refractory_period=10;
 oo.noise_level=0;
 oo.firing_rate_range=[0.5,3];
-oo.amp_variation_range=opts.amp_variation_range;
+oo.amp_variation_ranges=opts.amp_variation_ranges;
+oo.shape_variation_factors=opts.shape_variation_factors;
 oo.random_seed=opts.random_seed;
 oo.random_amp_factor_range=opts.random_amp_factor_range;
 
