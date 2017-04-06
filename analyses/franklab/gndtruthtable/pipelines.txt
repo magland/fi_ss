@@ -1,9 +1,14 @@
 ms2 ms2_001.pipeline --detect_sign=0 --detect_threshold=3.0
 ms2m ms2_001.pipeline --detect_sign=-1 --detect_threshold=3.0
 ms2mu ms2_001.pipeline --detect_sign=-1 --detect_threshold=3.0 --multichannel=true --adjacency_radius=25 --fit_stage=true
+ms2mu25 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --adjacency_radius=25 --fit_stage=true
+ms2mum25 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --adjacency_radius=25 --fit_stage=true --merge_across_channels=true
 
 ms mountainsort_002.pipeline --detect_sign=0 --detect_threshold=3.0
 msu mountainsort_002.pipeline --detect_sign=0 --detect_threshold=3.0 --multichannel=true --adjacency_radius=25 --fit_stage=true
 msmu mountainsort_002.pipeline --detect_sign=-1 --detect_threshold=3.0 --multichannel=true --adjacency_radius=25 --fit_stage=true
 
 msold mountainsort_001.pipeline --detect_sign=0 --detect_threshold=3.0
+
+truth1 truth_from_firings_true.pipeline --firings_file_name=firings_true.mda
+truth2 truth_from_firings_true.pipeline --firings_file_name=firings_true.mda
