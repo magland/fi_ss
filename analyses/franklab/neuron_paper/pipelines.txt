@@ -1,4 +1,4 @@
-ms2 ms2_001.pipeline --detect_sign=-1 --curation=curation_ms2.script
+ms2 ms2_001.pipeline --detect_sign=-1 --curation=curation_ms2.script --fit_stage=true --freq_min=300
 ms2_mc ms2_001.pipeline --detect_sign=-1 --multichannel=true --curation=curation_ms2.script --adjacency_radius=100 --fit_stage=true --merge_across_channels=true
 
 ks32 kilosort_001.pipeline --num_clusters=32
