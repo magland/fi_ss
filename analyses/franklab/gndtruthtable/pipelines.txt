@@ -3,6 +3,17 @@ ms2m ms2_001.pipeline --detect_sign=-1 --detect_threshold=3.0
 ms2mu ms2_001.pipeline --detect_sign=-1 --detect_threshold=3.0 --multichannel=true --adjacency_radius=25 --fit_stage=true
 ms2mu25 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --adjacency_radius=25 --fit_stage=true
 ms2mum25 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --adjacency_radius=25 --fit_stage=true --merge_across_channels=true
+ms2mum25sub ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --adjacency_radius=25 --fit_stage=true --merge_across_channels=true --channels=116,117,118,119,120,121,122,123,124,125
+ms2msub ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --channels=116,117,118,119,120,121,122,123,124,125
+ms2mum25sub28 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --adjacency_radius=25 --fit_stage=true --merge_across_channels=true --channels=101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128
+ms2msub28 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --channels=101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128
+
+debug ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --merge_across_channels=true --adjacency_radius=150 --channels=116,117,118,119,120,121,122,123,124,125
+debug2 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --merge_across_channels=true --fit_stage=true --adjacency_radius=150 --channels=116,117,118,119,120,121,122,123,124,125
+debug3 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --merge_across_channels=true --fit_stage=true --adjacency_radius=25
+debug4 ms2_001.pipeline --detect_sign=-1 --detect_threshold=2.5 --multichannel=true --merge_across_channels=true --fit_stage=true --adjacency_radius=60
+
+sc spyking_circus_001.pipeline --spike_thresh=6
 
 ms mountainsort_002.pipeline --detect_sign=0 --detect_threshold=3.0
 msu mountainsort_002.pipeline --detect_sign=0 --detect_threshold=3.0 --multichannel=true --adjacency_radius=25 --fit_stage=true
