@@ -2,6 +2,8 @@ ms2 ms2_001.pipeline --detect_sign=-1 --curation=curation_ms2.script --fit_stage
 ms2_mc ms2_001.pipeline --detect_sign=-1 --multichannel=true --curation=curation_ms2.script --adjacency_radius=100 --fit_stage=true --merge_across_channels=true --detect_interval_msec=.33
 ms2_mc_npt ms2_001.pipeline --_force_run --detect_sign=0 --freq_min=300 --clip_size_msec=1.7 --detect_threshold=3 --fit_stage=true --multichannel=true --curation=curation_ms2.script --adjacency_radius=100 --merge_across_channels=true --detect_interval_msec=.3
 
+ms2mn ms2_002.pipeline --whiten=true --curation=curation_ms2.script --detect_sign=1 --multineighborhood=true --adjacency_radius=100 --mask_out_artifacts=true --_force_run
+
 ks32 kilosort_001.pipeline --num_clusters=32
 ks64 kilosort_001.pipeline --num_clusters=64
 
