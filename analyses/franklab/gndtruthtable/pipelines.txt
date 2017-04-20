@@ -1,4 +1,5 @@
 ms2mn ms2_002.pipeline --whiten=true --curation=curation_ms2.script --detect_sign=-1 --multineighborhood=true --adjacency_radius=25 --mask_out_artifacts=true
+ms2mn_debug ms2_002.pipeline --whiten=true --curation=curation_ms2.script --detect_sign=-1 --multineighborhood=true --adjacency_radius=25 --mask_out_artifacts=true --fit_stage=false
 
 ms2 ms2_001.pipeline --detect_sign=0 --detect_threshold=3.0
 ms2m ms2_001.pipeline --detect_sign=-1 --detect_threshold=3.0
