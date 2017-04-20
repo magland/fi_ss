@@ -1,7 +1,7 @@
 {
-    "original_checksum": "3584c3174897b0ac75083eb4849684f4360ad09c",
-    "original_fcs": "head1000-22795f5487d11d8c8d3eb53f86e9f99a154a20f8",
-    "original_path": "/data/ahb/neuron/Kampff/2015_09_03_Pair_9_0/kampff128_1_firings_true.mda",
-    "original_size": 115868,
+    "original_checksum": "2e05d3d1fe43f721b8d29ec4fbe365aadcad26f7",
+    "original_fcs": "head1000-f116baa53e3ccfe6ac1b306b6217e039ba454281",
+    "original_path": "../../../../../raw/kampff128_1_firings_true.mda",
+    "original_size": 115052,
     "prv_version": "0.11"
 }
