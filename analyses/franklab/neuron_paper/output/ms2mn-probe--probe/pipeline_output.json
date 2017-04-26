@@ -1,0 +1,373 @@
+{
+    "error": "",
+    "parameters": {
+        "channels": "15,13,11,9,7,5,3,1,16,14,12,10,8,6,4,2",
+        "curation": "curation.ms2mn.script",
+        "detect_sign": 0,
+        "geom": "./../../../datasets/franklab/franklab_np_probe_01/geom.csv",
+        "inpath": "./../../../datasets/franklab/franklab_np_probe_01",
+        "multineighborhood": "true",
+        "outpath": "output/ms2mn-probe--probe",
+        "raw": "./../../../datasets/franklab/franklab_np_probe_01/raw.mda.prv",
+        "samplerate": 30000,
+        "whiten": "true"
+    },
+    "results": {
+        "processes": [
+            {
+                "inputs": {
+                    "input": "/typhoon/jason/fi_ss/analyses/franklab/neuron_paper/./../../../datasets/franklab/franklab_np_probe_01/geom.csv"
+                },
+                "outputs": {
+                    "output": "/typhoon/jason/tmp/mountainlab/tmp_long_term/290994ea05254e9c9f55f503e6859ed4ecd5bdc2-geom2adj-output.tmp"
+                },
+                "parameters": {
+                    "channels": null,
+                    "radius": 100
+                },
+                "processor_name": "geom2adj",
+                "results": {
+                    "avg_cpu_pct": 0,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp geom2adj --input=/typhoon/jason/fi_ss/analyses/franklab/neuron_paper/./../../../datasets/franklab/franklab_np_probe_01/geom.csv --output=/typhoon/jason/tmp/mountainlab/tmp_long_term/290994ea05254e9c9f55f503e6859ed4ecd5bdc2-geom2adj-output.tmp --channels= --radius=100 --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_V9XINK4I8V ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:09-13-35.840",
+                    "finished": true,
+                    "parameters": {
+                        "channels": "",
+                        "input": "/typhoon/jason/fi_ss/analyses/franklab/neuron_paper/./../../../datasets/franklab/franklab_np_probe_01/geom.csv",
+                        "output": "/typhoon/jason/tmp/mountainlab/tmp_long_term/290994ea05254e9c9f55f503e6859ed4ecd5bdc2-geom2adj-output.tmp",
+                        "radius": 100
+                    },
+                    "peak_cpu_pct": 0,
+                    "peak_mem_bytes": 0,
+                    "processor_name": "geom2adj",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:09-13-34.829",
+                    "success": true
+                }
+            },
+            {
+            },
+            {
+                "inputs": {
+                    "timeseries": "/typhoon/jason/fi_ss/analyses/franklab/neuron_paper/./../../../datasets/franklab/franklab_np_probe_01/raw.mda.prv"
+                },
+                "outputs": {
+                    "timeseries_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/39d340629b7c2d06b2b60d5bfc9f144f6f30be48-bandpass_filter-timeseries_out.tmp"
+                },
+                "parameters": {
+                    "freq_max": 6000,
+                    "freq_min": 300,
+                    "freq_wid": null,
+                    "samplerate": 30000
+                },
+                "processor_name": "bandpass_filter",
+                "results": {
+                    "avg_cpu_pct": 0,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp bandpass_filter --timeseries=/typhoon/jason/fi_ss//raw/7hr_nt19_full.mda --timeseries_out=/typhoon/jason/tmp/mountainlab/tmp_long_term/39d340629b7c2d06b2b60d5bfc9f144f6f30be48-bandpass_filter-timeseries_out.tmp --freq_max=6000 --freq_min=300 --freq_wid= --samplerate=30000 --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_UFEQ04TT4M ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:09-19-54.091",
+                    "finished": true,
+                    "parameters": {
+                        "freq_max": 6000,
+                        "freq_min": 300,
+                        "freq_wid": "",
+                        "samplerate": 30000,
+                        "timeseries": "/typhoon/jason/fi_ss//raw/7hr_nt19_full.mda",
+                        "timeseries_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/39d340629b7c2d06b2b60d5bfc9f144f6f30be48-bandpass_filter-timeseries_out.tmp"
+                    },
+                    "peak_cpu_pct": 0,
+                    "peak_mem_bytes": 3092000,
+                    "processor_name": "bandpass_filter",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:09-13-37.623",
+                    "success": true
+                }
+            },
+            {
+                "inputs": {
+                    "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/39d340629b7c2d06b2b60d5bfc9f144f6f30be48-bandpass_filter-timeseries_out.tmp"
+                },
+                "outputs": {
+                    "timeseries_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9953be09ec70cda71b71bc88183db67896acd714-mask_out_artifacts-timeseries_out.tmp"
+                },
+                "parameters": {
+                    "interval_size": 100,
+                    "threshold": 5
+                },
+                "processor_name": "mask_out_artifacts",
+                "results": {
+                    "avg_cpu_pct": 0,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp mask_out_artifacts --timeseries=/typhoon/jason/tmp/mountainlab/tmp_long_term/39d340629b7c2d06b2b60d5bfc9f144f6f30be48-bandpass_filter-timeseries_out.tmp --timeseries_out=/typhoon/jason/tmp/mountainlab/tmp_long_term/9953be09ec70cda71b71bc88183db67896acd714-mask_out_artifacts-timeseries_out.tmp --interval_size=100 --threshold=5 --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_V49PFP4UNV ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:09-26-04.772",
+                    "finished": true,
+                    "parameters": {
+                        "interval_size": 100,
+                        "threshold": 5,
+                        "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/39d340629b7c2d06b2b60d5bfc9f144f6f30be48-bandpass_filter-timeseries_out.tmp",
+                        "timeseries_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9953be09ec70cda71b71bc88183db67896acd714-mask_out_artifacts-timeseries_out.tmp"
+                    },
+                    "peak_cpu_pct": 0,
+                    "peak_mem_bytes": 3060000,
+                    "processor_name": "mask_out_artifacts",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:09-19-55.336",
+                    "success": true
+                }
+            },
+            {
+                "inputs": {
+                    "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9953be09ec70cda71b71bc88183db67896acd714-mask_out_artifacts-timeseries_out.tmp"
+                },
+                "outputs": {
+                    "timeseries_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                },
+                "parameters": {
+                },
+                "processor_name": "whiten",
+                "results": {
+                    "avg_cpu_pct": 0,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp whiten --timeseries=/typhoon/jason/tmp/mountainlab/tmp_long_term/9953be09ec70cda71b71bc88183db67896acd714-mask_out_artifacts-timeseries_out.tmp --timeseries_out=/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_XX6I88HPO2 ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:09-30-46.405",
+                    "finished": true,
+                    "parameters": {
+                        "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9953be09ec70cda71b71bc88183db67896acd714-mask_out_artifacts-timeseries_out.tmp",
+                        "timeseries_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                    },
+                    "peak_cpu_pct": 0,
+                    "peak_mem_bytes": 3068000,
+                    "processor_name": "whiten",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:09-26-06.043",
+                    "success": true
+                }
+            },
+            {
+                "inputs": {
+                    "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                },
+                "outputs": {
+                    "detect_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/a82efa33d66a1df1d5645d3b98b6cf0faf967f9b-detect-detect_out.tmp"
+                },
+                "parameters": {
+                    "clip_size": 50,
+                    "detect_interval": 10,
+                    "detect_threshold": 3.5,
+                    "individual_channels": 1,
+                    "sign": 0
+                },
+                "processor_name": "detect",
+                "results": {
+                    "avg_cpu_pct": 0.0080808080808080808,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp detect --timeseries=/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp --detect_out=/typhoon/jason/tmp/mountainlab/tmp_long_term/a82efa33d66a1df1d5645d3b98b6cf0faf967f9b-detect-detect_out.tmp --clip_size=50 --detect_interval=10 --detect_threshold=3.5 --individual_channels=1 --sign=0 --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_EBI8WUJNUQ ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:09-32-33.891",
+                    "finished": true,
+                    "parameters": {
+                        "clip_size": 50,
+                        "detect_interval": 10,
+                        "detect_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/a82efa33d66a1df1d5645d3b98b6cf0faf967f9b-detect-detect_out.tmp",
+                        "detect_threshold": 3.5,
+                        "individual_channels": 1,
+                        "sign": 0,
+                        "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                    },
+                    "peak_cpu_pct": 0.20000000000000001,
+                    "peak_mem_bytes": 3144000,
+                    "processor_name": "detect",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:09-30-47.748",
+                    "success": true
+                }
+            },
+            {
+                "inputs": {
+                    "adjacency_matrix": "/typhoon/jason/tmp/mountainlab/tmp_long_term/290994ea05254e9c9f55f503e6859ed4ecd5bdc2-geom2adj-output.tmp",
+                    "detect": "/typhoon/jason/tmp/mountainlab/tmp_long_term/a82efa33d66a1df1d5645d3b98b6cf0faf967f9b-detect-detect_out.tmp",
+                    "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                },
+                "outputs": {
+                    "firings_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/ea51afeb1e7962b7a98bae1098a88cf676708765-isocluster_v1-firings_out.tmp"
+                },
+                "parameters": {
+                    "K_init": 200,
+                    "clip_size": 50,
+                    "consolidation_factor": 0.90000000000000002,
+                    "detect_interval": 10,
+                    "isocut_threshold": 1,
+                    "num_features": 10,
+                    "num_features2": 10
+                },
+                "processor_name": "isocluster_v1",
+                "results": {
+                    "avg_cpu_pct": 0,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp isocluster_v1 --adjacency_matrix=/typhoon/jason/tmp/mountainlab/tmp_long_term/290994ea05254e9c9f55f503e6859ed4ecd5bdc2-geom2adj-output.tmp --detect=/typhoon/jason/tmp/mountainlab/tmp_long_term/a82efa33d66a1df1d5645d3b98b6cf0faf967f9b-detect-detect_out.tmp --timeseries=/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp --firings_out=/typhoon/jason/tmp/mountainlab/tmp_long_term/ea51afeb1e7962b7a98bae1098a88cf676708765-isocluster_v1-firings_out.tmp --K_init=200 --clip_size=50 --consolidation_factor=0.899999976 --detect_interval=10 --isocut_threshold=1 --num_features=10 --num_features2=10 --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_W687YZJ3HS ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:10-02-00.234",
+                    "finished": true,
+                    "parameters": {
+                        "K_init": 200,
+                        "adjacency_matrix": "/typhoon/jason/tmp/mountainlab/tmp_long_term/290994ea05254e9c9f55f503e6859ed4ecd5bdc2-geom2adj-output.tmp",
+                        "clip_size": 50,
+                        "consolidation_factor": 0.89999997615814209,
+                        "detect": "/typhoon/jason/tmp/mountainlab/tmp_long_term/a82efa33d66a1df1d5645d3b98b6cf0faf967f9b-detect-detect_out.tmp",
+                        "detect_interval": 10,
+                        "firings_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/ea51afeb1e7962b7a98bae1098a88cf676708765-isocluster_v1-firings_out.tmp",
+                        "isocut_threshold": 1,
+                        "num_features": 10,
+                        "num_features2": 10,
+                        "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                    },
+                    "peak_cpu_pct": 0,
+                    "peak_mem_bytes": 3144000,
+                    "processor_name": "isocluster_v1",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:09-32-48.153",
+                    "success": true
+                }
+            },
+            {
+                "inputs": {
+                    "firings": "/typhoon/jason/tmp/mountainlab/tmp_long_term/ea51afeb1e7962b7a98bae1098a88cf676708765-isocluster_v1-firings_out.tmp",
+                    "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                },
+                "outputs": {
+                    "firings_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/e90f58886677165f7b610d2e4caab82409174316-merge_across_channels_v2-firings_out.tmp"
+                },
+                "parameters": {
+                    "clip_size": 50
+                },
+                "processor_name": "merge_across_channels_v2",
+                "results": {
+                    "avg_cpu_pct": 0,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp merge_across_channels_v2 --firings=/typhoon/jason/tmp/mountainlab/tmp_long_term/ea51afeb1e7962b7a98bae1098a88cf676708765-isocluster_v1-firings_out.tmp --timeseries=/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp --firings_out=/typhoon/jason/tmp/mountainlab/tmp_long_term/e90f58886677165f7b610d2e4caab82409174316-merge_across_channels_v2-firings_out.tmp --clip_size=50 --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_TE3P91SY71 ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:10-04-35.722",
+                    "finished": true,
+                    "parameters": {
+                        "clip_size": 50,
+                        "firings": "/typhoon/jason/tmp/mountainlab/tmp_long_term/ea51afeb1e7962b7a98bae1098a88cf676708765-isocluster_v1-firings_out.tmp",
+                        "firings_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/e90f58886677165f7b610d2e4caab82409174316-merge_across_channels_v2-firings_out.tmp",
+                        "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                    },
+                    "peak_cpu_pct": 0,
+                    "peak_mem_bytes": 3064000,
+                    "processor_name": "merge_across_channels_v2",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:10-02-01.543",
+                    "success": true
+                }
+            },
+            {
+                "inputs": {
+                    "firings": "/typhoon/jason/tmp/mountainlab/tmp_long_term/e90f58886677165f7b610d2e4caab82409174316-merge_across_channels_v2-firings_out.tmp",
+                    "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                },
+                "outputs": {
+                    "firings_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/ae0cf00218b8baf5e53b1c070ba1347b8a50134d-fit_stage-firings_out.tmp"
+                },
+                "parameters": {
+                    "clip_size": 50,
+                    "min_shell_size": 150,
+                    "neglogprior": null,
+                    "shell_increment": 0,
+                    "use_old": null
+                },
+                "processor_name": "fit_stage",
+                "results": {
+                    "avg_cpu_pct": 0,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp fit_stage --firings=/typhoon/jason/tmp/mountainlab/tmp_long_term/e90f58886677165f7b610d2e4caab82409174316-merge_across_channels_v2-firings_out.tmp --timeseries=/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp --firings_out=/typhoon/jason/tmp/mountainlab/tmp_long_term/ae0cf00218b8baf5e53b1c070ba1347b8a50134d-fit_stage-firings_out.tmp --clip_size=50 --min_shell_size=150 --neglogprior= --shell_increment=0 --use_old= --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_SHC2A0Z3OG ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:10-07-56.185",
+                    "finished": true,
+                    "parameters": {
+                        "clip_size": 50,
+                        "firings": "/typhoon/jason/tmp/mountainlab/tmp_long_term/e90f58886677165f7b610d2e4caab82409174316-merge_across_channels_v2-firings_out.tmp",
+                        "firings_out": "/typhoon/jason/tmp/mountainlab/tmp_long_term/ae0cf00218b8baf5e53b1c070ba1347b8a50134d-fit_stage-firings_out.tmp",
+                        "min_shell_size": 150,
+                        "neglogprior": "",
+                        "shell_increment": 0,
+                        "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp",
+                        "use_old": ""
+                    },
+                    "peak_cpu_pct": 0,
+                    "peak_mem_bytes": 3072000,
+                    "processor_name": "fit_stage",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:10-04-36.937",
+                    "success": true
+                }
+            },
+            {
+                "inputs": {
+                    "firings": "/typhoon/jason/tmp/mountainlab/tmp_long_term/ae0cf00218b8baf5e53b1c070ba1347b8a50134d-fit_stage-firings_out.tmp",
+                    "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                },
+                "outputs": {
+                    "cluster_metrics": "/typhoon/jason/tmp/mountainlab/tmp_long_term/42c50f31b71366f99cc1b26c44953a52dcc54222-ms_metrics-cluster_metrics.tmp",
+                    "cluster_pair_metrics": "/typhoon/jason/tmp/mountainlab/tmp_long_term/718552af5b423f1c78106e238f06772f9d43c492-ms_metrics-cluster_pair_metrics.tmp"
+                },
+                "parameters": {
+                    "clip_size": 50,
+                    "do_not_compute_pair_metrics": null
+                },
+                "processor_name": "ms_metrics",
+                "results": {
+                    "avg_cpu_pct": 0.0053435114503816794,
+                    "error": "",
+                    "exe_command": "/home/jason/mountainlab/mountainprocess/processors/mountainsort.mp ms_metrics --firings=/typhoon/jason/tmp/mountainlab/tmp_long_term/ae0cf00218b8baf5e53b1c070ba1347b8a50134d-fit_stage-firings_out.tmp --timeseries=/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp --cluster_metrics=/typhoon/jason/tmp/mountainlab/tmp_long_term/42c50f31b71366f99cc1b26c44953a52dcc54222-ms_metrics-cluster_metrics.tmp --cluster_pair_metrics=/typhoon/jason/tmp/mountainlab/tmp_long_term/718552af5b423f1c78106e238f06772f9d43c492-ms_metrics-cluster_pair_metrics.tmp --clip_size=50 --do_not_compute_pair_metrics= --_tempdir=/typhoon/jason/tmp/mountainlab/tmp_short_term/tempdir_U7IEGKVZK2 ",
+                    "exit_code": 0,
+                    "exit_status": "NormalExit",
+                    "finish_time": "2017-04-21:10-10-16.541",
+                    "finished": true,
+                    "parameters": {
+                        "clip_size": 50,
+                        "cluster_metrics": "/typhoon/jason/tmp/mountainlab/tmp_long_term/42c50f31b71366f99cc1b26c44953a52dcc54222-ms_metrics-cluster_metrics.tmp",
+                        "cluster_pair_metrics": "/typhoon/jason/tmp/mountainlab/tmp_long_term/718552af5b423f1c78106e238f06772f9d43c492-ms_metrics-cluster_pair_metrics.tmp",
+                        "do_not_compute_pair_metrics": "",
+                        "firings": "/typhoon/jason/tmp/mountainlab/tmp_long_term/ae0cf00218b8baf5e53b1c070ba1347b8a50134d-fit_stage-firings_out.tmp",
+                        "timeseries": "/typhoon/jason/tmp/mountainlab/tmp_long_term/9e73d2572a7c134843f3372d74ce4edb44aa0fed-whiten-timeseries_out.tmp"
+                    },
+                    "peak_cpu_pct": 0.20000000000000001,
+                    "peak_mem_bytes": 3068000,
+                    "processor_name": "ms_metrics",
+                    "standard_error": "",
+                    "standard_output": "",
+                    "start_time": "2017-04-21:10-07-57.333",
+                    "success": true
+                }
+            }
+        ],
+        "total_time_sec": 3402.9360000000001
+    },
+    "script_fnames": [
+        "/home/jason/mountainlab/kron/../mountainsort/pipelines/mountainsort_002.pipeline"
+    ],
+    "success": true
+}
