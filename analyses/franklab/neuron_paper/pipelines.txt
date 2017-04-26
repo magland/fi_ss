@@ -5,7 +5,6 @@ ms2_mc_npt ms2_001.pipeline --_force_run --detect_sign=0 --freq_min=300 --clip_s
 ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --detect_sign=-1 --multineighborhood=true --adjacency_radius=100 --mask_out_artifacts=true
 ms2mnq ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --detect_sign=-1 --multineighborhood=true --adjacency_radius=100 --mask_out_artifacts=true --quantization_unit=1
 
-ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --detect_sign=-1 --multineighborhood=true -$
 ms2mn-probe mountainsort_002.pipeline --whiten=true --curation=curation.ms2mn.script --detect_sign=0 --multineigh$
 
 ms1 mountainsort_002.pipeline --curation=curation_ms2.script --detect_threshold=3
