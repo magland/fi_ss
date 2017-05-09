@@ -1,6 +1,2 @@
 tetrode datasets/franklab_np_tetrode_01
 probe datasets/franklab_np_probe_01
-
-tet_man1 ../../../datasets/franklab/tetrode_comparison_with_manual/manclust1
-tet_man2 ../../../datasets/franklab/tetrode_comparison_with_manual/manclust2
-tet_man3 ../../../datasets/franklab/tetrode_comparison_with_manual/manclust3
