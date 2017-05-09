@@ -1,7 +1,7 @@
 {
-    "original_checksum": "315acc08f171b4a1070093d9068d6b294d4293f5",
-    "original_fcs": "head1000-2bbdbfde7a5427d2f46d8e3471ddffc8a5ad5408",
+    "original_checksum": "26acdfb31ce802e14dbf26bc994c2e0859c0935e",
+    "original_fcs": "head1000-3f9e866ef4c204f9cb6b93fa6ed8658cb028683a",
     "original_path": "/home/magland/dev/fi_ss/raw/netokampff/firings_juxta_nk1.mda",
-    "original_size": 118436,
+    "original_size": 117500,
     "prv_version": "0.11"
 }
