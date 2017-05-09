@@ -1,7 +1,7 @@
-ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --detect_sign=-1 --multineighborhood=true --adjacency_radius=100 --mask_out_artifacts=true
-ms2mnq ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --detect_sign=-1 --multineighborhood=true --adjacency_radius=100 --mask_out_artifacts=true --quantization_unit=1
+ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true
+ms2mnq ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true --quantization_unit=1
 
-# comparison with manual
+# comparison with manual (for tetrode)
 manual1 use_truth.pipeline --firings_file_name=firings_manclust1.mda
 manual2 use_truth.pipeline --firings_file_name=firings_manclust2.mda
 manual3 use_truth.pipeline --firings_file_name=firings_manclust3.mda
@@ -9,6 +9,8 @@ manual3 use_truth.pipeline --firings_file_name=firings_manclust3.mda
 # KiloSort
 ks32 kilosort_001.pipeline --num_clusters=32
 ks64 kilosort_001.pipeline --num_clusters=64
+ks128 kilosort_001.pipeline --num_clusters=128
+ks256 kilosort_001.pipeline --num_clusters=256
 
 # Spyking Circus
 sc spyking_circus_001.pipeline --spike_thresh=4
