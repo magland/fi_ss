@@ -6,6 +6,9 @@ manual1 use_truth.pipeline --firings_file_name=firings_manclust1.mda
 manual2 use_truth.pipeline --firings_file_name=firings_manclust2.mda
 manual3 use_truth.pipeline --firings_file_name=firings_manclust3.mda
 
+# comparison with juxta ground truth (for neto-kampff)
+juxta use_truth.pipeline --firings_file_name=firings_juxta.mda
+
 # KiloSort
 ks32 kilosort_001.pipeline --num_clusters=32
 ks64 kilosort_001.pipeline --num_clusters=64
