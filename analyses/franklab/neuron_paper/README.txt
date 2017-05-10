@@ -82,3 +82,7 @@ ms2mn nk1 on jfm's home computer (12 threads)
   2.013 (mountainsort.cluster_metrics)
   212.826 (mountainsort.isolation_metrics)
   1.006 (mountainsort.combine_cluster_metrics)
+
+sc nk1_ch101-128 on jfm's home computer (12 threads)
+  514.114 (ml_spyking_circus) -- that's using threshold of 8 and max_elts=1000
+ 
