@@ -1,2 +1,0 @@
-kron-run ms2mn tetrode
-kron-view results ms2mn tetrode
