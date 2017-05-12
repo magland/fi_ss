@@ -21,7 +21,7 @@ fprintf('Confusion matrix for juxta,ks256 nk1\n');
 CM=readmda('CM_juxta_ks256_nk1.mda');
 [~,ii]=sort(CM(1,:),'descend');
 CM(:,ii(1:10))
-num_to_use=2;
+num_to_use=1;
 a=sum(CM(1,:));
 b=sum(CM(1,ii(1:num_to_use)));
 c=sum(CM(2:end,ii(1:num_to_use)));
@@ -38,7 +38,7 @@ fprintf('Confusion matrix for juxta,sc nk1\n');
 CM=readmda('CM_juxta_sc_nk1.mda');
 [~,ii]=sort(CM(1,:),'descend');
 CM(:,ii(1:10))
-num_to_use=2;
+num_to_use=1;
 a=sum(CM(1,:));
 b=sum(CM(1,ii(1:num_to_use)));
 c=sum(CM(2:end,ii(1:num_to_use)));

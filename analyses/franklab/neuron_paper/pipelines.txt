@@ -22,7 +22,7 @@ ks256 kilosort_001.pipeline --num_clusters=256
 
 # Spyking Circus
 sc spyking_circus_001.pipeline --spike_thresh=4 --max_elts=1000
-sc10000 spyking_circus_001.pipeline --spike_thresh=6 --max_elts=10000
+sc10000 spyking_circus_001.pipeline --spike_thresh=4 --max_elts=10000
 
 # older stuff
 ms1 mountainsort_002.pipeline --curation=curation_ms2.script --detect_threshold=3
