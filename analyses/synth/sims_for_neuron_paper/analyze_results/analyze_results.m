@@ -3,14 +3,14 @@ function analyze_results
 close all;
 drawnow;
 
-basepath=[fileparts(mfilename('fullpath')),'/..'];
-temppath=[basepath,'/tmpdata'];
-resultspath=[basepath,'/results'];
+projpath=[fileparts(mfilename('fullpath')),'/../project'];
+temppath=[projpath,'/tmpdata'];
+resultspath=[projpath,'/results'];
 mkdir(temppath);
 mkdir(resultspath);
 
 results={};
-list=dir([basepath,'/output']);
+list=dir([projpath,'/output']);
 for j=1:length(list)
     name0=list(j).name;
     if (~strcmp(name0(1),'.'))
@@ -20,7 +20,7 @@ for j=1:length(list)
             oo=struct;
             oo.temppath=temppath;
             resultpath=[resultspath,'/',name0];
-            ret=analyze_result(sprintf('%s/output/%s',basepath,name0),sprintf('%s/output/truth--%s',basepath,dsname0),resultpath,oo);
+            ret=analyze_result(sprintf('%s/output/%s',projpath,name0),sprintf('%s/output/truth--%s',projpath,dsname0),resultpath,oo);
             ret.algname=algname0;
             ret.dsname=dsname0;
             results{end+1}=ret;

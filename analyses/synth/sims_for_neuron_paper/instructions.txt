@@ -1,6 +1,7 @@
 Install and configure MountainLab
 
 Optionally install the KiloSort processor plugin: ml_kilosort
+Optionally install the Spyking Circus processor plugin: ml_spyking_circus
 
 1. Generate the datasets in matlab
 
