@@ -1,26 +1,36 @@
 function generate_datasets
 
-neuron_tetrode_path='/home/magland/dev/mountainsort_experiments/BIGFILES/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
-%neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
+% first run mountainlab_setup.m
+
+% Here's the dataset from which we will generate the background signal
+%neuron_tetrode_path='/home/magland/dev/mountainsort_experiments/BIGFILES/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
+neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
 %neuron_tetrode_path='/home/magland/prvdata/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
 samplerate=30000;
-snrs=[1200];
-Ks=[3];
-amp_variation_ranges=[1,1; 1,1; 1,1];
-shape_variation_factors=[0; 0; 0];
+
+% will create a separate dataset for each snr/k combo
+snrs=[10]; % snr of the average spike waveform
+Ks=[6]; % K = number of units
+
+% amplitude variation ranges
+amp_variation_ranges=[1,1; 1,1; 1,1; 1,1; 1,1; 1,1];
+shape_variation_factors=[0; 0; 0; 0; 0; 0];
 random_amp_factor_range=[1,1];
 
-basepath=[fileparts(mfilename('fullpath')),'/..'];
+projpath=[fileparts(mfilename('fullpath')),'/../project'];
 
-mkdir([basepath,'/tmpdata']);
-mkdir([basepath,'/raw']);
-mkdir([basepath,'/datasets']);
+mkdir(projpath);
+mkdir([projpath,'/tmpdata']);
+mkdir([projpath,'/raw']);
+mkdir([projpath,'/datasets']);
 
-background_signal_fname=[basepath,'/tmpdata/tet_background.mda'];
+system(sprintf('cp %s %s',[projpath,'/../pipelines.txt'],[projpath,'/pipelines.txt']));
+
+background_signal_fname=[projpath,'/tmpdata/tet_background.mda'];
 if (~exist(background_signal_fname))
     oo=struct;
     oo.samplerate=samplerate;
-    oo.tempdir=[basepath,'/tmpdata'];
+    oo.tempdir=[projpath,'/tmpdata'];
     create_background_signal_dataset(neuron_tetrode_path,background_signal_fname,oo);
 end;
 sz=readmdadims(background_signal_fname);
@@ -38,17 +48,17 @@ for iK=1:length(Ks)
     oo.shape_variation_factors=shape_variation_factors;
     oo.random_amp_factor_range=random_amp_factor_range;
     str0=sprintf('tet_K=%d',K);
-    create_signal_dataset(sprintf('%s/tmpdata/sig_%s.mda',basepath,str0),sprintf('%s/tmpdata/firings_%s.mda',basepath,str0),sprintf('%s/tmpdata/waveforms_%s.mda',basepath,str0),oo);
+    create_signal_dataset(sprintf('%s/tmpdata/sig_%s.mda',projpath,str0),sprintf('%s/tmpdata/firings_%s.mda',projpath,str0),sprintf('%s/tmpdata/waveforms_%s.mda',projpath,str0),oo);
 
     for j=1:length(snrs)
         str0=sprintf('tet_K=%d',K);
         str1=sprintf('%s_snr=%g',str0,snrs(j));
-        sig_fname=sprintf('%s/tmpdata/sig_%s.mda',basepath,str0);
-        firings_fname=sprintf('%s/tmpdata/firings_%s.mda',basepath,str0);
-        waveforms_fname=sprintf('%s/tmpdata/waveforms_%s.mda',basepath,str0);
-        raw_out_fname=sprintf('%s/raw/%s.mda',basepath,str1);
-        firings_out_fname=sprintf('%s/raw/firings_%s.mda',basepath,str1);
-        waveforms_out_fname=sprintf('%s/raw/waveforms_%s.mda',basepath,str1);
+        sig_fname=sprintf('%s/tmpdata/sig_%s.mda',projpath,str0);
+        firings_fname=sprintf('%s/tmpdata/firings_%s.mda',projpath,str0);
+        waveforms_fname=sprintf('%s/tmpdata/waveforms_%s.mda',projpath,str0);
+        raw_out_fname=sprintf('%s/raw/%s.mda',projpath,str1);
+        firings_out_fname=sprintf('%s/raw/firings_%s.mda',projpath,str1);
+        waveforms_out_fname=sprintf('%s/raw/waveforms_%s.mda',projpath,str1);
         oo=struct;
         oo.snr=snrs(j);
         create_dataset(background_signal_fname,sig_fname,firings_fname,waveforms_fname,raw_out_fname,firings_out_fname,waveforms_out_fname,oo);
@@ -56,7 +66,7 @@ for iK=1:length(Ks)
 end;
 
 datasets_txt='';
-A=dir([basepath,'/raw']);
+A=dir([projpath,'/raw']);
 oo=struct;
 oo.samplerate=samplerate;
 for j=1:length(A)
@@ -64,16 +74,16 @@ for j=1:length(A)
     raw_fname=B.name;
     if (~strcmp(raw_fname(1),'.'))&&(strcmp(raw_fname(end-3:end),'.mda'))&&(~strcmp(raw_fname(1:length('firings')),'firings'))&&(~strcmp(raw_fname(1:length('waveforms')),'waveforms'))
         str0=raw_fname(1:end-4);
-        raw_fname1=sprintf([basepath,'/raw/%s.mda'],str0);
-        firings_fname=sprintf([basepath,'/raw/firings_%s.mda'],str0);
-        waveforms_fname=sprintf([basepath,'/raw/waveforms_%s.mda'],str0);
-        dirname=sprintf([basepath,'/datasets/%s'],str0);
+        raw_fname1=sprintf([projpath,'/raw/%s.mda'],str0);
+        firings_fname=sprintf([projpath,'/raw/firings_%s.mda'],str0);
+        waveforms_fname=sprintf([projpath,'/raw/waveforms_%s.mda'],str0);
+        dirname=sprintf([projpath,'/datasets/%s'],str0);
         fprintf('Creating prv dataset: %s -> %s...\n',raw_fname1,dirname);
         create_prv_dataset(raw_fname1,firings_fname,waveforms_fname,dirname,oo);
         datasets_txt=sprintf('%s%s datasets/%s\n',datasets_txt,str0,str0);
     end;
 end;
-write_text_file([basepath,'/datasets.txt'],datasets_txt);
+write_text_file([projpath,'/datasets.txt'],datasets_txt);
 
 function create_prv_dataset(raw_fname,firings_fname,waveforms_fname,dirname_out,opts)
 mkdir(dirname_out);

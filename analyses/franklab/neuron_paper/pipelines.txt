@@ -1,4 +1,5 @@
 ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true
+ms2mn_test ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true
 ms2mnq ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true --quantization_unit=1
 
 # comparison with manual (for tetrode)
