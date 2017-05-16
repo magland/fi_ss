@@ -12,9 +12,10 @@ if (~isfield(opts,'waveform_variability_factor')) opts.waveform_variability_fact
 if (~isfield(opts,'rand_amp_factor_range')) opts.rand_amp_factor_range=[0.5,1]; end;
 if (~isfield(opts,'geom_spread_coef1')) opts.geom_spread_coef1=0.2; end;
 if (~isfield(opts,'geom_spread_coef2')) opts.geom_spread_coef2=1; end;
-if (~isfield(opts,'average_peak_amplitude')) opts.average_peak_amplitude=1; end;
+if (~isfield(opts,'average_peak_amplitude')) opts.average_peak_amplitude=0; end;
 if (~isfield(opts,'upsamplefac')) opts.upsamplefac=1; end;
 if (~isfield(opts,'timeshift_factor')) opts.timeshift_factor=0; end;
+if (~isfield(opts,'peak_amplitudes')) opts.peak_amplitudes=[]; end;
 
 neuron_locations=get_default_neuron_locations(M,K,opts);
 
@@ -33,7 +34,14 @@ for k=1:K
 end;
 
 peaks=max(max(abs(waveforms),[],1),[],2);
-waveforms=waveforms/mean(peaks)*opts.average_peak_amplitude;
+if (length(opts.peak_amplitudes)>0)
+    for k=1:K
+        waveforms(:,:,k)=waveforms(:,:,k)*opts.peak_amplitudes(k)/peaks(k);
+    end;
+end;
+if (opts.average_peak_amplitude>0)
+    waveforms=waveforms/mean(peaks)*opts.average_peak_amplitude;
+end;
 
 end
 

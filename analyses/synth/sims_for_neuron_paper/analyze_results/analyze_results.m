@@ -1,13 +1,28 @@
 function analyze_results
 
-close all;
-drawnow;
+%close all;
+%drawnow;
 
-projpath=[fileparts(mfilename('fullpath')),'/../project'];
+K=60;
+projpath=[fileparts(mfilename('fullpath')),sprintf('/../test1_K=%d',K)];
+if (K==60)
+    ks_num_clusters=64;
+else
+    ks_num_clusters=32;
+end;
+%projpath=[fileparts(mfilename('fullpath')),'/../project'];
+
+noise_overlap_threshold=0.02;
+isolation_score_threshold=0.99;
+show_labels=0;
+show_legend=1;
+
 temppath=[projpath,'/tmpdata'];
 resultspath=[projpath,'/results'];
+
 mkdir(temppath);
 mkdir(resultspath);
+
 
 results={};
 list=dir([projpath,'/output']);
@@ -15,12 +30,13 @@ for j=1:length(list)
     name0=list(j).name;
     if (~strcmp(name0(1),'.'))
         algname0=get_algname_from_output_folder_name(name0);
+        K=get_K_from_output_folder_name(name0);
         dsname0=get_dsname_from_output_folder_name(name0);
         if (~strcmp(algname0,'truth'))
             oo=struct;
             oo.temppath=temppath;
             resultpath=[resultspath,'/',name0];
-            ret=analyze_result(sprintf('%s/output/%s',projpath,name0),sprintf('%s/output/truth--%s',projpath,dsname0),resultpath,oo);
+            ret=analyze_result(sprintf('%s/output/%s',projpath,name0),sprintf('%s/output/truth--%s',projpath,dsname0),resultpath,oo);            
             ret.algname=algname0;
             ret.dsname=dsname0;
             results{end+1}=ret;
@@ -28,15 +44,15 @@ for j=1:length(list)
     end;
 end;
 
-concat_output_ms2=zeros(6,0);
-concat_output_ks32=zeros(6,0);
-concat_output_sc=zeros(6,0);
+concat_output_ms2=zeros(4,0);
+concat_output_ks32=zeros(4,0);
+concat_output_sc=zeros(4,0);
 for j=1:length(results)
     ret=results{j};
     if (strcmp(ret.algname,'ms2'))
         concat_output_ms2=cat(2,concat_output_ms2,ret.output);
     end;
-    if (strcmp(ret.algname,'ks32'))
+    if (strcmp(ret.algname,sprintf('ks%d',ks_num_clusters)))
         concat_output_ks32=cat(2,concat_output_ks32,ret.output);
     end;
     if (strcmp(ret.algname,'sc'))
@@ -52,7 +68,8 @@ MS2=concat_output_ms2;
 KS32=concat_output_ks32;
 SC=concat_output_sc;
 
-marker_size=6;
+marker_size=12;
+line_width=2;
 
 % figure;
 % h=plot(MS2(1,:),MS2(2,:),'bo','MarkerSize',marker_size);
@@ -64,64 +81,39 @@ marker_size=6;
 % title('Accuracy vs. peak amplitude');
 
 figure;
-set(gcf,'Position',[200,200,1000,1000]);
-ppp=1;
+set(gcf,'Position',[200,200,1800,800]);
 
-subplot(3,2,ppp); ppp=ppp+1;
-h=plot(MS2(1,:),MS2(3,:),'bo','MarkerSize',marker_size);
+h_ks=plot(KS32(1,:),KS32(2,:),'o','MarkerSize',marker_size,'Color',[1,0,0],'LineWidth',line_width);
 hold on;
-h=plot(KS32(1,:),KS32(3,:),'ro','MarkerSize',marker_size);
-h=plot(SC(1,:),SC(3,:),'go','MarkerSize',marker_size);
-legend('MountainSort','KiloSort','SpyKING Circus');
-xlabel('Peak amplitude');
-ylabel('Unit sensitivity rate');
-title('Sensitivity rate vs. peak amplitude');
+h_sc=plot(SC(1,:),SC(2,:),'o','MarkerSize',marker_size,'Color',[0,0.7,0],'LineWidth',line_width);
 
-subplot(3,2,ppp); ppp=ppp+1;
-h=plot(MS2(1,:),MS2(4,:),'bo','MarkerSize',marker_size);
-hold on;
-h=plot(KS32(1,:),KS32(4,:),'ro','MarkerSize',marker_size);
-h=plot(SC(1,:),SC(4,:),'go','MarkerSize',marker_size);
-legend('MountainSort','KiloSort','SpyKING Circus');
-xlabel('Peak amplitude');
-ylabel('Unit specificity rate');
-title('Specificity rate vs. peak amplitude');
+h_ms=plot(MS2(1,:),MS2(2,:),'o','MarkerSize',marker_size,'Color',[0,0,1],'LineWidth',line_width); hold on;
 
-% for this plot ignore the ones that have no match
-MS2=MS2(:,find(MS2(2,:)>0));
+noise_overlap=MS2(3,:);
+isolation_score=MS2(4,:);
+accepted_inds=find((noise_overlap<=noise_overlap_threshold)&(isolation_score>=isolation_score_threshold));
+h_msa=plot(MS2(1,accepted_inds),MS2(2,accepted_inds),'o','MarkerSize',marker_size-line_width*3,'Color',[0,0,1],'MarkerFaceColor',[0,0,1]); hold on;
 
-subplot(3,2,ppp); ppp=ppp+1;
-h=plot(MS2(5,:),MS2(3,:),'bo','MarkerSize',marker_size);
-xlabel('Noise overlap metric');
-ylabel('Unit sensitivity rate');
-title({'Sensitivity vs. noise overlap metric','for MountainSort'});
+set(gca,'ylim',[-0.1,1.1]);
+%title('Accuracy vs. peak amplitude');
+set(gca,'FontSize',20);
+if (show_labels)
+    ylabel('Accuracy');
+    xlabel('Peak amplitude (# std devs)');
+    title(sprintf('%d true clusters, around %d detectable',K,floor(K/2)),'FontSize',40);
+end;
 
-subplot(3,2,ppp); ppp=ppp+1;
-h=plot(MS2(5,:),MS2(4,:),'bo','MarkerSize',marker_size);
-xlabel('Noise overlap metric');
-ylabel('Unit specificity rate');
-title({'Specificity vs. noise overlap metric','for MountainSort'});
-
-subplot(3,2,ppp); ppp=ppp+1;
-h=plot(MS2(6,:),MS2(3,:),'bo','MarkerSize',marker_size);
-xlabel('Isolation metric');
-ylabel('Unit sensitivity rate');
-title({'Sensitivity vs. isolation metric','for MountainSort'});
-
-subplot(3,2,ppp); ppp=ppp+1;
-h=plot(MS2(6,:),MS2(4,:),'bo','MarkerSize',marker_size);
-xlabel('Isolation metric');
-ylabel('Unit specificity rate');
-title({'Specificity vs. isolation metric','for MountainSort'});
-
-disp('done.');
+if (show_legend)
+    h_legend=legend([h_ms,h_msa,h_ks,h_sc],'MountainSort (All)','MountainSort (Accepted)',sprintf('KiloSort (%d)',ks_num_clusters),'Spyking Circus','Location','northwest');
+    set(h_legend,'FontSize',20);
+end;
 
 
 function [CM,label_map]=compute_confusion_matrix(firings1,firings2,opts)
 CM_fname=sprintf('%s/CM_tmp.mda',opts.temppath);
 label_map_fname=sprintf('%s/label_map_tmp.mda',opts.temppath);
 delete(CM_fname);
-cmd=sprintf('mp-run-process mountainsort.confusion_matrix --firings1=%s --firings2=%s --relabel_firings2=true --max_matching_offset=30 --confusion_matrix_out=%s --firings2_relabel_map_out=%s',...
+cmd=sprintf('mp-run-process mountainsort.confusion_matrix --firings1=%s --firings2=%s --relabel_firings2=false --max_matching_offset=30 --confusion_matrix_out=%s --label_map_out=%s',...
             firings1,firings2,CM_fname,label_map_fname);
 cmd=adjust_system_command(cmd);
 disp(['Running ',cmd]);
@@ -136,26 +128,38 @@ firings_true=resolve_prv([truth_output_path,'/firings.mda.prv']);
 waveforms_true=[truth_output_path,'/waveforms.mda'];
 [CM,label_map]=compute_confusion_matrix(firings_true,firings,opts);
 writemda64(CM,[result_path,'/confusion_matrix.mda']);
-[accuracies,sensitivity_rates,specificity_rates]=compute_accuracies_from_confusion_matrix(CM);
+[accuracies]=compute_accuracies_from_confusion_matrix(CM);
 peak_amplitudes=compute_peak_amplitudes_from_waveforms(readmda(waveforms_true));
+K=length(peak_amplitudes);
 cluster_metrics=[output_path,'/cluster_metrics.json'];
 if (exist(cluster_metrics))
     json=fileread(cluster_metrics);
     obj=jsondecode(json);
-    noise_overlaps=get_cluster_metric(obj,length(accuracies),'noise_overlap',label_map);
-    isolations=get_cluster_metric(obj,length(accuracies),'isolation', label_map);
+    noise_overlaps0=get_cluster_metric(obj,length(accuracies),'noise_overlap',label_map);
+    isolations0=get_cluster_metric(obj,length(accuracies),'isolation',label_map);
+    noise_overlaps=zeros(1,K);
+    isolations=zeros(1,K);
+    for k=1:K
+        if (label_map(k)>=1)&&(label_map(k)<=length(noise_overlaps0))
+            noise_overlaps(k)=noise_overlaps0(label_map(k));
+            isolations(k)=isolations0(label_map(k));
+        else
+            noise_overlaps(k)=nan;
+            isolations(k)=nan;
+        end;
+    end;
 else
-    noise_overlaps=zeros(size(accuracies));
-    isolations=zeros(size(accuracies));
+    noise_overlaps=zeros(1,K);
+    isolations=zeros(1,K);
 end;
 
-output=zeros(6,length(accuracies));
+
+
+output=zeros(4,length(accuracies));
 output(1,:)=peak_amplitudes;
 output(2,:)=accuracies;
-output(3,:)=sensitivity_rates;
-output(4,:)=specificity_rates;
-output(5,:)=noise_overlaps;
-output(6,:)=isolations;
+output(3,:)=noise_overlaps;
+output(4,:)=isolations;
 
 writemda64(output,[result_path,'/output.mda']);
 csvwrite([result_path,'/output.csv'],output);
@@ -165,15 +169,12 @@ result.output=output;
 result.confusion_matrix=CM;
 
 function ret=get_cluster_metric(obj,K,metric_name,label_map)
-ret=zeros(1,K);
+ret=zeros(1,0);
 clusters=obj.clusters;
 for j=1:length(clusters)
     cluster=clusters(j);
     k=cluster.label;
-    if (k>=1)&&(k<=length(label_map))
-        k=label_map(k);
-    end;
-    if (k>=1)&&(k<=K)
+    if (k>0)
         ret(k)=cluster.metrics.(metric_name);
     end;
 end;
@@ -183,25 +184,18 @@ function peak_amplitudes=compute_peak_amplitudes_from_waveforms(waveforms)
 waveforms=reshape(waveforms,M*T,K);
 peak_amplitudes=max(abs(waveforms),[],1)';
 
-function [accuracies,sensitivity_rates,specificity_rates]=compute_accuracies_from_confusion_matrix(CM)
+function [accuracies]=compute_accuracies_from_confusion_matrix(CM)
 [N1,N2]=size(CM);
 K1=N1-1; K2=N2-1;
-accuracies=zeros(1,K1);
-sensitivity_rates=zeros(1,K1);
-specificity_rates=zeros(1,K1);
-for k1=1:K1
-    if (k1<=K2)
-        numer0=CM(k1,k1);
-        if (numer0)
-            denom0=sum(CM(k1,:))+sum(CM(:,k1))-CM(k1,k1);
-            denom1=sum(CM(k1,:));
-            denom2=sum(CM(:,k1));
-            accuracies(k1)=numer0/denom0;
-            sensitivity_rates(k1)=numer0/denom1;
-            specificity_rates(k1)=numer0/denom2;
-        end;
-    end;
-end;
+numer=CM(1:K1,1:K2);
+denom1=repmat(sum(CM(:,1:K2),1),K1,1);
+denom2=repmat(sum(CM(1:K1,:),2),1,K2);
+denom=denom1+denom2-numer;
+denom(denom==0)=1;
+ratio=numer./denom;
+
+accuracies=max(ratio,[],2);
+
 
 function fname=resolve_prv(prv_fname)
 [~,str]=system(sprintf('prv-locate %s',prv_fname));
@@ -218,6 +212,12 @@ list=strsplit(name,'--');
 if (length(list)>=2)
     dsname=strjoin(list(2:end),'');
 end;
+
+function K=get_K_from_output_folder_name(name)
+dsname=get_dsname_from_output_folder_name(name);
+list=strsplit(dsname,'_');
+list2=strsplit(list{2},'=');
+K=str2num(list2{2});
 
 function cmd=adjust_system_command(cmd)
 cmd=sprintf('%s %s','LD_LIBRARY_PATH=/usr/local/lib',cmd);

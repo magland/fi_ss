@@ -12,6 +12,7 @@ Edit and run generate_datasets/generate_datasets.m
 kron-run truth all
 kron-run ms2 all
 optional: kron-run ks32 all
+optional: kron-run sc all
 
 3. Analyze the results in matlab
 

@@ -14,6 +14,7 @@ if (~isfield(opts,'amp_variation_ranges')), opts.amp_variation_ranges=[1,1]; end
 if (~isfield(opts,'shape_variation_factors')), opts.shape_variation_factors=[0]; end;
 if (~isfield(opts,'show_figures')), opts.show_figures=0; end;
 if (isfield(opts,'random_seed')), random_seed(opts.random_seed); end;
+if (~isfield(opts,'peak_amplitudes')), opts.peak_amplitudes=[]; end;
 
 if (size(opts.amp_variation_ranges,1)==1) opts.amp_variation_ranges=repmat(opts.amp_variation_ranges,opts.K,1); end;
 if (length(opts.shape_variation_factors)==1) opts.shape_variation_factors=ones(K,1)*opts.shape_variation_factors; end;
@@ -42,8 +43,12 @@ firing_rates=opts.firing_rate_range(1)+rand(1,K)*(opts.firing_rate_range(2)-opts
 %amp_variations=zeros(2,K); amp_variations(1,:)=tmp; amp_variations(2,:)=1; %amplitude variation
 amp_variation_ranges=opts.amp_variation_ranges;
 
+opts2=struct;
 opts2.geom_spread_coef1=0.4;
 opts2.upsamplefac=synth_opts.upsamplefac;
+opts2.peak_amplitudes=opts.peak_amplitudes;
+pp=randperm(K);
+opts2.peak_amplitudes=opts2.peak_amplitudes(pp); % apply a random permutation so they are not related to geometry location
 waveforms=synthesize_random_waveforms(M,T,K,opts2);
 
 if (show_figures)

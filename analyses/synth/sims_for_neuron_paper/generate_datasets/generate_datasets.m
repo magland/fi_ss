@@ -8,14 +8,18 @@ neuron_tetrode_path='/home/magland/dev/fi_ss/raw/20160426_kanye_02_r1.nt16.mda';
 %neuron_tetrode_path='/home/magland/prvdata/neuron_paper/tetrode/20160426_kanye_02_r1.nt16.mda';
 samplerate=30000;
 
-% will create a separate dataset for each snr/k combo
-snrs=[10]; % snr of the average spike waveform
-Ks=[6]; % K = number of units
+K=15; % K = true number of units
+max_amp=20;
+peak_amplitudes=((1:K)/K).^2*max_amp; % in units of std.dev noise
+num_datasets=1;
+rng(1);
 
 % amplitude variation ranges
-amp_variation_ranges=[1,1; 1,1; 1,1; 1,1; 1,1; 1,1];
-shape_variation_factors=[0; 0; 0; 0; 0; 0];
-random_amp_factor_range=[1,1];
+amp_variation_ranges=repmat([1,1],K,1);
+shape_variation_factors=zeros(1,K);
+%amp_variation_ranges=[0.5,1.5; 0.5,1.5; 1,1; 1,1; 1,1; 1,1; 1,1; 1,1; 1,1; 1,1; 1,1; 1,1];
+%shape_variation_factors=[0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0];
+%random_amp_factor_range=[1,1];
 
 projpath=[fileparts(mfilename('fullpath')),'/../project'];
 
@@ -36,33 +40,28 @@ end;
 sz=readmdadims(background_signal_fname);
 M=sz(1); N=sz(2);
 
-for iK=1:length(Ks)
-    K=Ks(iK);
+for ii=1:num_datasets
     oo=struct;
-    oo.K=Ks;
+    oo.K=K;
     oo.M=M;
     oo.N=N;
     oo.samplerate=samplerate;
-    oo.random_seed=1;
     oo.amp_variation_ranges=amp_variation_ranges;
     oo.shape_variation_factors=shape_variation_factors;
-    oo.random_amp_factor_range=random_amp_factor_range;
-    str0=sprintf('tet_K=%d',K);
+    oo.peak_amplitudes=peak_amplitudes;
+    %oo.random_amp_factor_range=random_amp_factor_range;
+    str0=sprintf('tet_K=%d_%d',K,ii);
     create_signal_dataset(sprintf('%s/tmpdata/sig_%s.mda',projpath,str0),sprintf('%s/tmpdata/firings_%s.mda',projpath,str0),sprintf('%s/tmpdata/waveforms_%s.mda',projpath,str0),oo);
-
-    for j=1:length(snrs)
-        str0=sprintf('tet_K=%d',K);
-        str1=sprintf('%s_snr=%g',str0,snrs(j));
-        sig_fname=sprintf('%s/tmpdata/sig_%s.mda',projpath,str0);
-        firings_fname=sprintf('%s/tmpdata/firings_%s.mda',projpath,str0);
-        waveforms_fname=sprintf('%s/tmpdata/waveforms_%s.mda',projpath,str0);
-        raw_out_fname=sprintf('%s/raw/%s.mda',projpath,str1);
-        firings_out_fname=sprintf('%s/raw/firings_%s.mda',projpath,str1);
-        waveforms_out_fname=sprintf('%s/raw/waveforms_%s.mda',projpath,str1);
-        oo=struct;
-        oo.snr=snrs(j);
-        create_dataset(background_signal_fname,sig_fname,firings_fname,waveforms_fname,raw_out_fname,firings_out_fname,waveforms_out_fname,oo);
-    end;
+    
+    sig_fname=sprintf('%s/tmpdata/sig_%s.mda',projpath,str0);
+    firings_fname=sprintf('%s/tmpdata/firings_%s.mda',projpath,str0);
+    waveforms_fname=sprintf('%s/tmpdata/waveforms_%s.mda',projpath,str0);
+    raw_out_fname=sprintf('%s/raw/%s.mda',projpath,str0);
+    firings_out_fname=sprintf('%s/raw/firings_%s.mda',projpath,str0);
+    waveforms_out_fname=sprintf('%s/raw/waveforms_%s.mda',projpath,str0);
+    oo=struct;
+    create_dataset(background_signal_fname,sig_fname,firings_fname,waveforms_fname,raw_out_fname,firings_out_fname,waveforms_out_fname,oo);
+    
 end;
 
 datasets_txt='';
@@ -102,8 +101,8 @@ Xbackground=readmda(background_fname);
 fprintf('Reading signal: %s...\n',sig_fname);
 Xsig=readmda(sig_fname);
 
-fprintf('Combining signal and background, snr=%g...\n',opts.snr);
-Y=Xbackground+opts.snr*Xsig;
+fprintf('Combining signal and background...\n');
+Y=Xbackground+Xsig;
 max_16bit=2^14; %a bit safe
 
 scale_factor_16bit=max_16bit/max(abs(Y(:)));
@@ -118,7 +117,6 @@ writemda(readmda(firings_fname),firings_out_fname);
 
 fprintf('Writing true waveforms: %s...\n',waveforms_out_fname);
 waveforms0=readmda(waveforms_fname);
-waveforms0=waveforms0*opts.snr;
 writemda(waveforms0,waveforms_out_fname);
 
 function create_signal_dataset(timeseries_out_path,firings_out_path,waveforms_out_path,opts)
@@ -132,8 +130,8 @@ oo.noise_level=0;
 oo.firing_rate_range=[0.5,3];
 oo.amp_variation_ranges=opts.amp_variation_ranges;
 oo.shape_variation_factors=opts.shape_variation_factors;
-oo.random_seed=opts.random_seed;
-oo.random_amp_factor_range=opts.random_amp_factor_range;
+oo.peak_amplitudes=opts.peak_amplitudes;
+%oo.random_amp_factor_range=opts.random_amp_factor_range;
 
 fprintf('Synthesizing signal timeseries...\n');
 [Y,firings_true,waveforms_true]=synthesize_timeseries_001(oo);
