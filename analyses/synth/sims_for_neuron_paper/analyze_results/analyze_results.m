@@ -1,9 +1,16 @@
 function analyze_results
 
-%close all;
-%drawnow;
+% run mountainlab_setup.m first
 
-K=60;
+opts.show_labels=0;
+opts.show_legend=1;
+
+analyze_results2(15,opts);
+analyze_results2(30,opts);
+analyze_results2(60,opts);
+
+function analyze_results2(K,opts1)
+
 projpath=[fileparts(mfilename('fullpath')),sprintf('/../test1_K=%d',K)];
 if (K==60)
     ks_num_clusters=64;
@@ -14,15 +21,14 @@ end;
 
 noise_overlap_threshold=0.02;
 isolation_score_threshold=0.99;
-show_labels=0;
-show_legend=1;
+show_labels=opts1.show_labels;
+show_legend=opts1.show_legend;
 
 temppath=[projpath,'/tmpdata'];
 resultspath=[projpath,'/results'];
 
 mkdir(temppath);
 mkdir(resultspath);
-
 
 results={};
 list=dir([projpath,'/output']);
@@ -68,8 +74,8 @@ MS2=concat_output_ms2;
 KS32=concat_output_ks32;
 SC=concat_output_sc;
 
-marker_size=12;
-line_width=2;
+marker_size=20;
+line_width=3;
 
 % figure;
 % h=plot(MS2(1,:),MS2(2,:),'bo','MarkerSize',marker_size);
@@ -83,30 +89,38 @@ line_width=2;
 figure;
 set(gcf,'Position',[200,200,1800,800]);
 
-h_ks=plot(KS32(1,:),KS32(2,:),'o','MarkerSize',marker_size,'Color',[1,0,0],'LineWidth',line_width);
+h_ks=plot(KS32(1,:),KS32(2,:),'o','MarkerSize',marker_size+4,'Color',[1,0,0],'LineWidth',line_width);
 hold on;
-h_sc=plot(SC(1,:),SC(2,:),'o','MarkerSize',marker_size,'Color',[0,0.7,0],'LineWidth',line_width);
+h_sc=plot(SC(1,:),SC(2,:),'o','MarkerSize',marker_size+8,'Color',[0,0.7,0.3],'LineWidth',line_width);
 
 h_ms=plot(MS2(1,:),MS2(2,:),'o','MarkerSize',marker_size,'Color',[0,0,1],'LineWidth',line_width); hold on;
 
 noise_overlap=MS2(3,:);
 isolation_score=MS2(4,:);
 accepted_inds=find((noise_overlap<=noise_overlap_threshold)&(isolation_score>=isolation_score_threshold));
-h_msa=plot(MS2(1,accepted_inds),MS2(2,accepted_inds),'o','MarkerSize',marker_size-line_width*3,'Color',[0,0,1],'MarkerFaceColor',[0,0,1]); hold on;
+h_msa=plot(MS2(1,accepted_inds),MS2(2,accepted_inds),'o','MarkerSize',marker_size-line_width*4,'Color',[0,0,1],'MarkerFaceColor',[0,0,1]); hold on;
 
-set(gca,'ylim',[-0.1,1.1]);
+set(gca,'ylim',[0,1]);
 %title('Accuracy vs. peak amplitude');
-set(gca,'FontSize',20);
+set(gca,'FontSize',40);
+set(gca,'xtick',0:5:max(MS2(1,:)));
+set(gca,'ytick',0:0.1:1);
+set(gca,'gridalpha',1);
+set(gca,'gridlinestyle','--');
+set(gca,'gridcolor',[0.2,0.2,0.2]);
+set(gca,'yticklabel',{0,'','','','',0.5,'','','','',1});
 if (show_labels)
     ylabel('Accuracy');
     xlabel('Peak amplitude (# std devs)');
     title(sprintf('%d true clusters, around %d detectable',K,floor(K/2)),'FontSize',40);
 end;
+grid on;
 
 if (show_legend)
-    h_legend=legend([h_ms,h_msa,h_ks,h_sc],'MountainSort (All)','MountainSort (Accepted)',sprintf('KiloSort (%d)',ks_num_clusters),'Spyking Circus','Location','northwest');
-    set(h_legend,'FontSize',20);
+    h_legend=legend([h_ms,h_msa,h_ks,h_sc],'MountainSort (All)','MountainSort (Accepted)',sprintf('KiloSort',ks_num_clusters),'Spyking Circus','Location','northwest');
+    set(h_legend,'FontSize',40);
 end;
+drawnow;
 
 
 function [CM,label_map]=compute_confusion_matrix(firings1,firings2,opts)
