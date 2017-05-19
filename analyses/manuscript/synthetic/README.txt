@@ -15,7 +15,7 @@ Let's call that /path/to/raw
 cd datasets/K15
 prv-download raw.mda.prv /path/to/raw --server=http://datalaboratory.org:8005
 prv-download firings_true.prv /path/to/raw --server=http://datalaboratory.org:8005
-prv-download waveforms.prv /path/to/raw --server=http://datalaboratory.org:8005
+prv-download waveforms_true.prv /path/to/raw --server=http://datalaboratory.org:8005
 
 Repeat for K30 and K60
 
