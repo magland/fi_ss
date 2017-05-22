@@ -4,6 +4,7 @@ Step 2: Use mlconfig to ensure the datasets are in a prv search path
 Step 3: Run the processing and view the results
 
 Note: you can also generate new datasets. See the generate_datasets directory.
+Note: the figures are generated using scripts in the analyze_results directory.
 
 -- Detailed steps --
 
