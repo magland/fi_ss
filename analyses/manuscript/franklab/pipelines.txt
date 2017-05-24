@@ -9,9 +9,14 @@ manual3 use_truth.pipeline --firings_file_name=firings_manclust3.mda
 juxta use_truth.pipeline --firings_file_name=firings_juxta.mda
 
 # pull up the static results
-results_ms2mn use_truth.pipeline --firings_file_name=RESULTS_firings_ms2mn.mda
-results_ks256 use_truth.pipeline --firings_file_name=RESULTS_firings_ks256.mda
-results_sc use_truth.pipeline --firings_file_name=RESULTS_firings_sc.mda
+results_ms2mn use_truth.pipeline --firings_file_name=RESULTS_firings_ms2mn.curated.mda
+results_ks64 use_truth.pipeline --firings_file_name=RESULTS_firings_ks64.curated.mda
+results_sc use_truth.pipeline --firings_file_name=RESULTS_firings_sc.curated.mda
+results_kk use_truth.pipeline --firings_file_name=RESULTS_firings_kk.curated.mda
+
+test_ms2mn use_truth.pipeline --firings_file_name=test_firings_ms2mn.mda
+test_ks64 use_truth.pipeline --firings_file_name=test_firings_ks64.mda
+
 
 # KiloSort
 ks32 kilosort_001.pipeline --num_clusters=32
