@@ -1,0 +1,59 @@
+{
+    "cluster_attributes": {
+    },
+    "cluster_order_scores": [
+    ],
+    "cluster_order_scores_name": "",
+    "cluster_pair_attributes": {
+    },
+    "clusters_subset": [
+    ],
+    "current_timeseries_name": "Raw Data",
+    "electrode_geometry": {
+        "coordinates": [
+        ]
+    },
+    "firings": {
+        "original_checksum": "2ed480a74ac5b81f484a661850fc92a0052bdadb",
+        "original_fcs": "head1000-8994d0c305858f483bc057ac8b60e365f86dcc15",
+        "original_path": "../../../results/firings_ms2mn_nk1.mda",
+        "original_size": 92285012,
+        "prv_version": "0.11"
+    },
+    "mlproxy_url": "",
+    "options": {
+        "amp_thresh_display": 3,
+        "cc_bin_size_msec": 0.5,
+        "cc_log_time_constant_msec": 1,
+        "cc_max_dt_msec": 100,
+        "cc_max_est_data_size": "1e4",
+        "clip_size": 100,
+        "discrim_hist_method": "centroid"
+    },
+    "samplerate": 30000,
+    "timeseries": {
+        "Raw Data": {
+            "data": {
+                "original_checksum": "1a20f3260679451a6334b62326f8305cbbbaa6f8",
+                "original_fcs": "head1000-815199a466b003b956142e0b828dad96cbd9f447",
+                "original_path": "/data/ahb/neuron/Kampff/2015_09_03_Pair_9_0/kampff128_1_raw.mda",
+                "original_size": 4556144660,
+                "prv_version": "0.11"
+            },
+            "name": "Raw Data"
+        }
+    },
+    "view_merged": false,
+    "visibility_rule": {
+        "hide_rejected": true,
+        "subset": [
+        ],
+        "use_subset": false,
+        "view_all_tagged": true,
+        "view_all_untagged": true,
+        "view_tags": [
+        ]
+    },
+    "visible_channels": [
+    ]
+}
