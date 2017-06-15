@@ -16,7 +16,7 @@
     "firings": {
         "original_checksum": "26acdfb31ce802e14dbf26bc994c2e0859c0935e",
         "original_fcs": "head1000-3f9e866ef4c204f9cb6b93fa6ed8658cb028683a",
-        "original_path": "/home/magland/dev/fi_ss/raw/netokampff/firings_juxta_nk1_thr150.mda",
+        "original_path": "datasets/nk1/firings_juxta_nk1_thr150.mda",
         "original_size": 117500,
         "prv_version": "0.11"
     },
@@ -43,7 +43,7 @@
             "name": "Raw Data"
         }
     },
-    "view_merged": true,
+    "view_merged": false,
     "visibility_rule": {
         "hide_rejected": true,
         "subset": [
