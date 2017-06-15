@@ -1,4 +1,6 @@
 ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true
+ms2mn_4thr ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true --num_threads=4
+ms2mn_12thr ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true --num_threads=12
 
 # KiloSort
 ks32 kilosort_001.pipeline --num_clusters=32
