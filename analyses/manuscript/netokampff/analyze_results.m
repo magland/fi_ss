@@ -4,6 +4,10 @@ fprintf('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
 CM=csvread('results/CM_juxta_ms2mn.csv');
 report_stats(CM,2);
 
+fprintf('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n');
+CM=csvread('results/CM_juxta_ms3.csv');
+report_stats(CM,2);
+
 fprintf('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ KS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n');
 CM=csvread('results/CM_juxta_ks256.csv');
 report_stats(CM,2);
