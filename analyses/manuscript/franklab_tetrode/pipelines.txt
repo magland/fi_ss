@@ -1,4 +1,4 @@
-ms3 ms3.pipeline --whiten=true --curation=curation.ms2mn.script --detect_threshold=2 --fit_stage=true --merge_across_channels=true
+ms3 ms3.pipeline --whiten=true --detect_threshold=3 --fit_stage=true --merge_across_channels=true --adjacency_radius=100
 
 ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true
 ms2mn_4thr ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true --num_threads=4
