@@ -1,6 +1,7 @@
 #/bin/bash
 
 if true; then
+	mkdir raw
 	RAW="/home/magland/dev/fi_ss/raw/7hr_nt19_full.mda"
 
 	echo "1hr"
