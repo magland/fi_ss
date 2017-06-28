@@ -1,6 +1,4 @@
-ms3 ms3.pipeline --detect_threshold=2
-
-ms2 ms2_002.pipeline --detect_threshold=3
+ms3 ms3.pipeline --detect_threshold=3
 
 # KiloSort
 ks32 kilosort_001.pipeline --num_clusters=32
