@@ -1,3 +1,5 @@
+ms3 ms3.pipeline --whiten=true
+
 ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true
 
 # KiloSort
