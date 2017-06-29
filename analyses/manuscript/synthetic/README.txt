@@ -13,10 +13,9 @@ Step 1: Download the datasets
 Choose a directory on your computer where you want to keep raw data.
 Let's call that /path/to/raw
 
-cd datasets/K15
-prv-download raw.mda.prv /path/to/raw --server=http://datalaboratory.org:8005
-prv-download firings_true.mda.prv /path/to/raw --server=http://datalaboratory.org:8005
-prv-download waveforms_true.mda.prv /path/to/raw --server=http://datalaboratory.org:8005
+prv-download datasets/K15/raw.mda.prv /path/to/raw --server=river
+prv-download datasets/K15/firings_true.mda.prv /path/to/raw --server=river
+prv-download datasets/K15/waveforms_true.mda.prv /path/to/raw --server=river
 
 Repeat for K30 and K60
 
@@ -29,7 +28,7 @@ to your prv search path
 
 Step 3: Run the processing and view the results
 
-kron-run ms2 K15
+kron-run ms3 K15 --_nodaemon
 kron-view results ms2 K15
 
 Repeat for K30 and K60
