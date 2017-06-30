@@ -1,2 +1,3 @@
-ms2mn ms2_002.pipeline --whiten=false --detect_sign=-1 --multineighborhood=true --mask_out_artifacts=false
+ms3 ms3.pipeline --whiten=false --detect_sign=-1 --multineighborhood=true --mask_out_artifacts=false --fit_stage=false
+ms2mn ms2_002.pipeline --whiten=false --detect_sign=-1 --multineighborhood=true --mask_out_artifacts=false --adjacency_radius=100
 sc spyking_circus_001.pipeline --spike_thresh=6

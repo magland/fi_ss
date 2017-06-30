@@ -1,4 +1,4 @@
-ms3 ms3.pipeline --whiten=true
+ms3 ms3.pipeline --whiten=true --num_threads=16
 
 ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true
 

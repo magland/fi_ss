@@ -1,4 +1,9 @@
+ms3_4thr ms3.pipeline --num_threads=4 --whiten=true --detect_sign=-1 --mask_out_artifacts=false --compute_metrics=true
+ms3_8thr ms3.pipeline --num_threads=8 --whiten=true --detect_sign=-1 --mask_out_artifacts=false --compute_metrics=true
+ms3_12thr ms3.pipeline --num_threads=12 --whiten=true --detect_sign=-1 --mask_out_artifacts=false --compute_metrics=true
 ms3_16thr ms3.pipeline --num_threads=16 --whiten=true --detect_sign=-1 --mask_out_artifacts=false --compute_metrics=true
+ms3_20thr ms3.pipeline --num_threads=20 --whiten=true --detect_sign=-1 --mask_out_artifacts=false --compute_metrics=true
+ms3_24thr ms3.pipeline --num_threads=24 --whiten=true --detect_sign=-1 --mask_out_artifacts=false --compute_metrics=true
 
 ms2mn ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true
 ms2mn_8thr ms2_002.pipeline --whiten=true --curation=curation.ms2mn.script --multineighborhood=true --num_threads=8

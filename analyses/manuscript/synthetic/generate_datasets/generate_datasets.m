@@ -84,7 +84,7 @@ for j=1:length(A)
 end;
 write_text_file([projpath,'/datasets.txt'],datasets_txt);
 
-function create_prv_dataset(raw_fname,firings_fname,waveforms_fname,dirname_out,opts)
+function create_prv_dataset(raw_fname,firings_fname,s_fname,dirname_out,opts)
 mkdir(dirname_out);
 system(sprintf('prv-create %s %s',raw_fname,[dirname_out,'/raw.mda.prv']));
 system(sprintf('prv-create %s %s',firings_fname,[dirname_out,'/firings_true.mda.prv']));

@@ -1,4 +1,6 @@
-ms3 ms3.pipeline --detect_threshold=3
+ms3 ms3.pipeline --detect_threshold=3 --adjacency_radius=100
+
+ms2mn ms2_002.pipeline --detect_threshold=3 --multineighborhood=true --adjacency_radius=100
 
 # KiloSort
 ks32 kilosort_001.pipeline --num_clusters=32
