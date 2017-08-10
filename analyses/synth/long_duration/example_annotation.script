@@ -21,21 +21,25 @@ function main(obj) {
         	C.addTag('rejected');
         	C.addTag('noise_overlap');
         }
+/*
         if (C.metric('isolation')<min_isolation) {
         	console.log('Low isolation: '+C.label());
         	C.addTag('rejected');
         	C.addTag('low_isolation');
         }
+*/
         if (C.metric('peak_snr')<min_snr) {
         	console.log('Low snr: '+C.label());
         	C.addTag('rejected');
         	C.addTag('low_snr');
         }
+/*
         if (C.metric('firing_rate')<min_firing_rate) {
         	console.log('Low firing rate: '+C.label());
         	C.addTag('rejected');
         	C.addTag('low_firing_rate');
         }
+*/
     }
 }
 

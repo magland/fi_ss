@@ -18,6 +18,17 @@ if ~exist('data/raw.mda','file')||~exist('data/geom.csv','file')
     write_geometry_file(geom,'data/geom.csv');
 end;
 
+mda_size=readmdadims('data/raw.mda');
+M=mda_size(1);
+N=mda_size(2);
+segment_duration=30000*60*30;
+segment_overlap=30000*60*0;
+segment_increment=segment_duration-segment_overlap;
+segments={};
+for t=0:segment_increment:max(0,N-segment_duration)
+    segments{end+1}=[t,min(t+segment_duration-1,N-1)];
+end;
+
 % View the simulated raw dataset
 % view_timeseries(X);
 
@@ -33,15 +44,16 @@ mp_run_process('mountainsort.whiten',...
     struct('timeseries_out','data/pre.mda'),...
     struct());
 
-num_segments=2;
 segment_firings={};
-for iseg=1:num_segments
-
+for iseg=1:length(segments)
+    fprintf('********************** Processing segment %d of %d *********************',iseg,length(segments));
+    SS=segments{iseg};
+    
     prefix=sprintf('%03d',iseg);
 
     % Spike sorting using MountainSort
     sort_opts.adjacency_radius=100;
-    sort_opts.t1=-1; sort_opts.t2=-1;
+    sort_opts.t1=SS(1); sort_opts.t2=SS(2);
     mp_run_process('mountainsort.mountainsort3',...
         struct('timeseries','data/pre.mda', 'geom','data/geom.csv'),...
         struct('firings_out',sprintf('data/%s_firings.mda',prefix)),...
@@ -73,7 +85,8 @@ for iseg=1:num_segments
 
     mp_run_process('mountainsort.combine_cluster_metrics',...
         struct('metrics_list',{metrics_list}),...
-        struct('metrics_out',sprintf('data/%s_cluster_metrics.json',prefix)));
+        struct('metrics_out',sprintf('data/%s_cluster_metrics.json',prefix)),...
+        struct());
 
     % Automated annotation
     script_fname='example_annotation.script';
@@ -81,15 +94,21 @@ for iseg=1:num_segments
         struct('metrics',sprintf('data/%s_cluster_metrics.json',prefix),'script',script_fname),...
         struct('metrics_out',sprintf('data/%s_cluster_metrics_annotated.json',prefix)),...
         struct());
+    
+    % Extract firings
+    mp_run_process('mountainsort.extract_firings',...
+        struct('firings',sprintf('data/%s_firings.mda',prefix),'metrics',sprintf('data/%s_cluster_metrics_annotated.json',prefix)),...
+        struct('firings_out',sprintf('data/%s_firings2.mda',prefix)),...
+        struct('exclusion_tags','rejected'));
 
     segment_firings{end+1}=sprintf('data/%s_firings.mda',prefix);
     
 end;
 
-mp_run_process('mountainsort.combine_firings',...
-        struct('firings_list',{segment_firings}),...
+mp_run_process('mountainsort.combine_firing_segments',...
+        struct('timeseries','data/pre.mda','firings_list',{segment_firings}),...
         struct('firings_out',sprintf('data/firings.mda')),...
-        struct('increment_labels','true'));
+        struct('match_score_threshold','0.8'));
     
 % Compute metrics for combined firings
 metrics_list={};
@@ -116,11 +135,24 @@ mp_run_process('mountainsort.run_metrics_script',...
     struct('metrics_out',sprintf('data/cluster_metrics_annotated.json')),...
     struct());
 
+% Extract firings
+mp_run_process('mountainsort.extract_firings',...
+    struct('firings',sprintf('data/firings.mda'),'metrics',sprintf('data/cluster_metrics_annotated.json')),...
+    struct('firings_out',sprintf('data/firings2.mda')),...
+    struct('exclusion_tags','rejected'));
+
 % View the templates
 %figure; ms_view_templates(readmda('data/templates_filt.mda'));
 
 % Launch the viewer
-spikeview(struct(...
+% spikeview(struct(...
+%     'raw','data/raw.mda',... 
+%     'firings',sprintf('data/firings.mda'),...
+%     'samplerate',samplerate,...
+%     'cluster_metrics','data/cluster_metrics_annotated.json',...
+%     'geom','data/geom.csv'...
+% ));
+mountainview(struct(...
     'raw','data/raw.mda',... 
     'firings',sprintf('data/firings.mda'),...
     'samplerate',samplerate,...
@@ -139,3 +171,13 @@ synthesize_timeseries_003(ooo,firings_fname,waveforms_fname,timeseries_fname);
 function write_geometry_file(geom,fname_out)
 csvwrite(fname_out,geom');
 
+function mountainview(A)
+ld_library_str='LD_LIBRARY_PATH=/usr/local/lib';
+args='';
+keys=fieldnames(A);
+for j=1:length(keys)
+    args=sprintf('%s--%s=%s ',args,keys{j},num2str(A.(keys{j})));
+end;
+cmd=sprintf('%s mountainview %s &',ld_library_str,args);
+fprintf('%s\n',cmd);
+system(cmd);
